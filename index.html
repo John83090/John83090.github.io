@@ -1,10 +1,242 @@
 <!DOCTYPE html>
-  <html>
-  <head>
-      <title>Dino Rush: T-Rex Runner & Jump</title>
-  </head>
-  <body>
-      <h1>Dino Rush: T-Rex Runner & Jump</h1>
-      <p>Developer website for app verification.</p>
-  </body>
-  </html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Live Sub Counter – Real-Time Subscriber Tracker</title>
+  <meta name="description" content="Track any YouTube channel's live subscriber and view count in real time. Smooth animated counters, auto-refresh, and milestone tracking." />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e0e6f0;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: #0f1117;
+      border-bottom: 1px solid #1e2540;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+    nav .logo span {
+      background: #ff0000;
+      color: #fff;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    nav a.pp-link {
+      color: #7a9cc8;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a.pp-link:hover { color: #fff; }
+    .hero {
+      text-align: center;
+      padding: 80px 20px 60px;
+      background: linear-gradient(180deg, #141826 0%, #0f1117 100%);
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: #4fc3f7;
+    }
+    .hero p {
+      font-size: clamp(15px, 2vw, 19px);
+      color: #8fa8c8;
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .badge {
+      background: #1c2340;
+      border: 1px solid #2c3a60;
+      color: #8fa8c8;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #4fc3f7;
+      color: #0a0e1a;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .download-btn:hover { background: #81d4fa; }
+    .counter-demo { text-align: center; padding: 20px 20px 0; }
+    .counter-box {
+      display: inline-block;
+      background: #141a2e;
+      border: 1.5px solid #2a4a80;
+      border-radius: 16px;
+      padding: 24px 40px;
+      margin-top: 40px;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ff4444;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #ff4444;
+      border-radius: 50%;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .counter-number {
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 800;
+      font-family: "Courier New", monospace;
+      color: #4fc3f7;
+      letter-spacing: 2px;
+    }
+    .counter-label { font-size: 13px; color: #5a7a9a; margin-top: 6px; }
+    .features { padding: 80px 20px; max-width: 1000px; margin: 0 auto; }
+    .section-title {
+      text-align: center;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 48px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: #141a2e;
+      border: 1px solid #1e2a4a;
+      border-radius: 14px;
+      padding: 28px 24px;
+    }
+    .feature-icon { font-size: 30px; margin-bottom: 14px; }
+    .feature-card h3 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: #6a8aaa; line-height: 1.6; }
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid #1e2540;
+      color: #4a6a8a;
+      font-size: 13px;
+    }
+    footer a { color: #7a9cc8; text-decoration: none; margin: 0 12px; }
+    footer a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">
+      <span>LIVE</span> YouTube Sub Counter
+    </a>
+    <a href="privacy-policy.html" class="pp-link">Privacy Policy</a>
+  </nav>
+  <section class="hero">
+    <h1>Track YouTube Subscribers<br /><em>Live, in Real Time</em></h1>
+    <p>Watch any YouTube channel’s subscriber and view counts update live with smooth animated counters, auto-refresh every second, and milestone tracking.</p>
+    <div class="badge-row">
+      <span class="badge">📱 Android</span>
+      <span class="badge">🆓 Free</span>
+      <span class="badge">⚡ Real-Time Updates</span>
+      <span class="badge">🌙 Dark Mode</span>
+    </div>
+    <a href="https://play.google.com/store/apps/details?id=com.balaji.youtubelivecounts" class="download-btn">
+      ▶ Get it on Google Play
+    </a>
+    <div class="counter-demo">
+      <div class="counter-box">
+        <div class="live-badge"><div class="live-dot"></div> LIVE SUBSCRIBERS</div>
+        <div class="counter-number">471,921,716</div>
+        <div class="counter-label">MrBeast · Updated just now</div>
+      </div>
+    </div>
+  </section>
+  <section class="features">
+    <h2 class="section-title">Everything You Need</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Quick Channel Search</h3>
+        <p>Search any YouTube channel by name, URL, or UC ID. Results appear instantly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Real-Time Counters</h3>
+        <p>Subscriber and view counts update every second with smooth odometer-style animations powered by multiple live data sources.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Full Channel Metrics</h3>
+        <p>View estimated subs, views, video count, daily gains, monthly gains and more — all in one dashboard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Milestone Tracker</h3>
+        <p>See how close a channel is to the next milestone (1K, 10K, 100K, 1M, 10M…) with a live progress bar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎬</div>
+        <h3>Recent Videos</h3>
+        <p>Browse the channel’s latest uploads with view counts and publish times, directly in the app.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌙</div>
+        <h3>Dark &amp; Light Theme</h3>
+        <p>Automatically follows your system theme. Looks great in both dark and light mode.</p>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <p style="margin-bottom:12px;">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="mailto:your@email.com">Contact</a>
+    </p>
+    <p>&copy; 2026 YouTube Live Sub Counter. All rights reserved.</p>
+  </footer>
+</body>
+</html>
