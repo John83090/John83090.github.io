@@ -3,240 +3,1845 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YouTube Live Sub Counter – Real-Time Subscriber Tracker</title>
-  <meta name="description" content="Track any YouTube channel's live subscriber and view count in real time. Smooth animated counters, auto-refresh, and milestone tracking." />
+  <title>Telugu Christian Songs – Worship &amp; Praise</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ─── Reset & Base ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0d0d14;
+      --surface:   #161622;
+      --surface2:  #1e1e2e;
+      --surface3:  #252538;
+      --accent:    #7c3aed;
+      --accent2:   #a855f7;
+      --accent3:   #c084fc;
+      --gold:      #f59e0b;
+      --text:      #f1f0ff;
+      --text2:     #a09ec0;
+      --text3:     #6b69a0;
+      --border:    #2a2a40;
+      --player-h:  72px;
+      --nav-h:     60px;
+      --sidebar-w: 220px;
+      --radius:    12px;
+      --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f1117;
-      color: #e0e6f0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      overflow: hidden;
+      height: 100vh;
     }
-    nav {
+
+    /* ─── Scrollbar ──────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 99px; }
+
+    /* ─── Layout  (position:fixed — works everywhere, no flex height bugs) ── */
+    #app { display: block; }
+
+    /* ─── Sidebar ────────────────────────────────────────────────── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--surface);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 40px;
-      background: #0f1117;
-      border-bottom: 1px solid #1e2540;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      flex-direction: column;
+      padding: 20px 0 0;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 50;
     }
-    nav .logo {
+    .logo {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 18px;
+      padding: 0 18px 24px;
+      font-size: 15px;
       font-weight: 700;
-      color: #fff;
-      text-decoration: none;
+      color: var(--text);
+      letter-spacing: .3px;
     }
-    nav .logo span {
-      background: #ff0000;
-      color: #fff;
-      border-radius: 6px;
-      padding: 2px 8px;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
-    nav a.pp-link {
-      color: #7a9cc8;
-      text-decoration: none;
+    .logo-text { line-height: 1.2; }
+    .logo-text small { font-size: 10px; color: var(--text2); font-weight: 400; }
+    .nav-section { padding: 8px 10px; }
+    .nav-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1.2px; padding: 4px 8px 10px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text2);
       font-size: 14px;
+      font-weight: 500;
+      transition: all .15s;
+      user-select: none;
     }
-    nav a.pp-link:hover { color: #fff; }
-    .hero {
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.15)); color: var(--text); }
+    .nav-item .icon { font-size: 18px; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-divider { height: 1px; background: var(--border); margin: 8px 16px; }
+
+    /* ─── Main Content  (all fixed — zero flex height bugs) ─────── */
+    #main-wrap { display: block; }
+    #main-content {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-w);
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-bottom: calc(var(--player-h) + 20px);
+      background: var(--bg);
+    }
+
+    /* ─── Screens ────────────────────────────────────────────────── */
+    .screen { display: none; padding: 28px 28px 0; animation: fadeIn .2s ease; }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .screen-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .screen-title { font-size: 26px; font-weight: 800; letter-spacing: -.5px; }
+    .screen-sub { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+    /* ─── Home: Quick tiles ──────────────────────────────────────── */
+    .greeting { margin-bottom: 22px; }
+    .greeting h1 { font-size: 24px; font-weight: 800; }
+    .greeting p { color: var(--text2); font-size: 13px; margin-top: 4px; }
+    .quick-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      margin-bottom: 30px;
+    }
+    .quick-tile {
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all .15s;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .quick-tile:hover { background: var(--surface3); transform: scale(1.01); }
+    .quick-tile img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .quick-tile-info { overflow: hidden; }
+    .quick-tile-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .quick-tile-artist { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ─── Section Headers ────────────────────────────────────────── */
+    .section { margin-bottom: 32px; }
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-head h2 { font-size: 17px; font-weight: 700; }
+    .see-all { font-size: 12px; color: var(--accent2); cursor: pointer; }
+    .see-all:hover { color: var(--accent3); }
+
+    /* ─── Horizontal Scroll Row ──────────────────────────────────── */
+    .h-scroll {
+      display: flex; gap: 14px;
+      overflow-x: auto; padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .h-scroll::-webkit-scrollbar { display: none; }
+    .song-card {
+      width: 140px; flex-shrink: 0;
+      cursor: pointer; transition: transform .15s;
+    }
+    .song-card:hover { transform: scale(1.03); }
+    .song-card img {
+      width: 140px; height: 140px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      display: block;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.5);
+    }
+    .song-card-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .song-card-artist { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ─── Song List Row ──────────────────────────────────────────── */
+    .song-list-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 8px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background .1s;
+    }
+    .song-list-item:hover { background: var(--surface2); }
+    .song-list-item.playing { background: rgba(124,58,237,.15); }
+    .song-list-item.playing .sli-title { color: var(--accent2); }
+    .sli-num { width: 24px; text-align: center; font-size: 12px; color: var(--text3); flex-shrink: 0; }
+    .song-list-item.playing .sli-num { display: none; }
+    .sli-playing-icon { display: none; width: 24px; text-align: center; flex-shrink: 0; font-size: 14px; }
+    .song-list-item.playing .sli-playing-icon { display: flex; align-items: center; justify-content: center; }
+    .sli-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .sli-info { flex: 1; min-width: 0; }
+    .sli-title { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sli-artist { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sli-duration { font-size: 12px; color: var(--text3); flex-shrink: 0; }
+    .sli-like { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; flex-shrink: 0; padding: 4px; transition: color .15s; }
+    .sli-like:hover { color: var(--accent2); }
+    .sli-like.liked { color: #ef4444; }
+
+    /* ─── Featured Banner ────────────────────────────────────────── */
+    .featured-banner {
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      height: 180px;
+      margin-bottom: 30px;
+      cursor: pointer;
+    }
+    .featured-banner img { width: 100%; height: 100%; object-fit: cover; }
+    .featured-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(13,13,20,.95) 40%, rgba(13,13,20,.1));
+      display: flex; flex-direction: column; justify-content: center; padding: 24px;
+    }
+    .featured-badge {
+      font-size: 10px; color: var(--accent3); text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 6px; font-weight: 600;
+    }
+    .featured-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .featured-sub { font-size: 13px; color: var(--text2); margin-bottom: 14px; }
+    .featured-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 99px;
+      padding: 8px 18px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .15s;
+    }
+    .featured-btn:hover { background: var(--accent2); }
+
+    /* ─── Search Screen ──────────────────────────────────────────── */
+    .search-bar {
+      position: relative; margin-bottom: 22px;
+    }
+    .search-bar input {
+      width: 100%; background: var(--surface2);
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      color: var(--text); padding: 12px 14px 12px 42px;
+      font-size: 14px; outline: none; transition: border-color .15s;
+    }
+    .search-bar input:focus { border-color: var(--accent); }
+    .search-bar input::placeholder { color: var(--text3); }
+    .search-bar .search-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; color: var(--text3);
+    }
+    .search-bar .clear-btn {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--text3); font-size: 18px; display: none;
+    }
+    .categories-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      margin-bottom: 24px;
+    }
+    .cat-chip {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 10px;
       text-align: center;
-      padding: 80px 20px 60px;
-      background: linear-gradient(180deg, #141826 0%, #0f1117 100%);
+      cursor: pointer; transition: all .15s;
+      font-size: 13px; font-weight: 600;
     }
-    .hero h1 {
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.2;
-      margin-bottom: 18px;
+    .cat-chip:hover, .cat-chip.active {
+      background: rgba(124,58,237,.2);
+      border-color: var(--accent);
+      color: var(--accent3);
     }
-    .hero h1 em {
-      font-style: normal;
-      color: #4fc3f7;
+    .cat-chip .cat-emoji { font-size: 22px; display: block; margin-bottom: 4px; }
+    #search-results { min-height: 100px; }
+    .no-results { color: var(--text2); text-align: center; padding: 30px 0; font-size: 14px; }
+
+    /* ─── Library Screen ─────────────────────────────────────────── */
+    .lib-tabs {
+      display: flex; gap: 0; margin-bottom: 22px;
+      background: var(--surface2); border-radius: var(--radius-sm); padding: 4px;
     }
-    .hero p {
-      font-size: clamp(15px, 2vw, 19px);
-      color: #8fa8c8;
-      max-width: 560px;
-      margin: 0 auto 36px;
-      line-height: 1.6;
+    .lib-tab {
+      flex: 1; text-align: center;
+      padding: 9px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; color: var(--text2);
+      cursor: pointer; transition: all .15s;
     }
-    .badge-row {
-      display: flex;
-      justify-content: center;
+    .lib-tab.active { background: var(--surface3); color: var(--text); }
+    .lib-panel { display: none; }
+    .lib-panel.active { display: block; }
+    .artist-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 8px; cursor: pointer; border-radius: var(--radius-sm);
+      transition: background .1s;
+    }
+    .artist-card:hover { background: var(--surface2); }
+    .artist-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .artist-name { font-size: 15px; font-weight: 600; }
+    .artist-count { font-size: 12px; color: var(--text2); }
+    .album-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 8px; cursor: pointer; border-radius: var(--radius-sm);
+      transition: background .1s;
+    }
+    .album-card:hover { background: var(--surface2); }
+    .album-cover {
+      width: 52px; height: 52px; border-radius: 8px; object-fit: cover;
+    }
+    .album-name { font-size: 14px; font-weight: 600; }
+    .album-count { font-size: 12px; color: var(--text2); }
+
+    /* ─── Mini Player ────────────────────────────────────────────── */
+    #mini-player {
+      position: fixed; bottom: 0; left: var(--sidebar-w); right: 0;
+      height: var(--player-h);
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 16px;
       gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
+      cursor: pointer;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      display: none;
     }
-    .badge {
-      background: #1c2340;
-      border: 1px solid #2c3a60;
-      color: #8fa8c8;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 13px;
+    #mini-player.visible { display: flex; }
+    .mp-thumb {
+      width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4);
     }
-    .download-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: #4fc3f7;
-      color: #0a0e1a;
-      font-weight: 700;
-      font-size: 16px;
-      padding: 14px 32px;
-      border-radius: 12px;
-      text-decoration: none;
-      transition: background 0.2s;
+    .mp-info { flex: 1; min-width: 0; }
+    .mp-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mp-artist { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mp-progress {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--surface3);
     }
-    .download-btn:hover { background: #81d4fa; }
-    .counter-demo { text-align: center; padding: 20px 20px 0; }
-    .counter-box {
-      display: inline-block;
-      background: #141a2e;
-      border: 1.5px solid #2a4a80;
+    .mp-progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width .5s linear; }
+    .mp-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .mp-btn {
+      background: none; border: none; cursor: pointer; color: var(--text);
+      font-size: 22px; width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: background .15s;
+    }
+    .mp-btn:hover { background: var(--surface3); }
+    .mp-btn.play-btn {
+      background: var(--accent); width: 42px; height: 42px;
+      font-size: 20px;
+    }
+    .mp-btn.play-btn:hover { background: var(--accent2); }
+    .mp-like-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 18px; padding: 4px 8px; }
+    .mp-like-btn.liked { color: #ef4444; }
+
+    /* ─── Full Player Overlay ────────────────────────────────────── */
+    #full-player {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+    }
+    #full-player.open { transform: none; }
+    .fp-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 0;
+    }
+    .fp-down-btn {
+      background: none; border: none; cursor: pointer; color: var(--text2);
+      font-size: 26px; padding: 4px; line-height: 1;
+    }
+    .fp-context { text-align: center; font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+    .fp-more-btn { background: none; border: none; cursor: pointer; color: var(--text2); font-size: 22px; padding: 4px; }
+    .fp-art-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .fp-art {
+      width: min(340px, 80vw); height: min(340px, 80vw);
+      border-radius: var(--radius);
+      object-fit: cover;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7);
+      transition: transform .3s;
+    }
+    #full-player.playing .fp-art { transform: scale(1.03); }
+    .fp-info-bar { padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .fp-title { font-size: 19px; font-weight: 800; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fp-artist { font-size: 13px; color: var(--text2); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+    .fp-like-btn { background: none; border: none; cursor: pointer; font-size: 22px; color: var(--text3); flex-shrink: 0; transition: color .15s; }
+    .fp-like-btn.liked { color: #ef4444; }
+    .fp-seekbar-wrap { padding: 18px 24px 6px; }
+    .fp-seekbar {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px;
+      border-radius: 99px; outline: none; cursor: pointer;
+      background: var(--surface3);
+    }
+    .fp-seekbar::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%; background: var(--text);
+      cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.5);
+    }
+    .fp-time { display: flex; justify-content: space-between; padding: 4px 24px 0; font-size: 12px; color: var(--text3); }
+    .fp-controls {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px 24px;
+    }
+    .fp-ctrl-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text2); font-size: 22px;
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: all .15s;
+    }
+    .fp-ctrl-btn:hover { background: var(--surface2); color: var(--text); }
+    .fp-ctrl-btn.active { color: var(--accent2); }
+    .fp-play-btn {
+      background: var(--text); color: var(--bg);
+      width: 62px; height: 62px; border-radius: 50%;
+      font-size: 26px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.5);
+    }
+    .fp-play-btn:hover { transform: scale(1.05); background: var(--text); }
+    .fp-queue { padding: 0 20px 20px; }
+    .fp-queue-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+    /* ─── Loading ────────────────────────────────────────────────── */
+    .loader { display: flex; align-items: center; justify-content: center; padding: 40px; }
+    .spinner {
+      width: 30px; height: 30px;
+      border: 3px solid var(--surface3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Toast ──────────────────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: calc(var(--player-h) + 16px); left: 50%; transform: translateX(-50%);
+      background: var(--surface3); color: var(--text);
+      padding: 10px 18px; border-radius: 99px;
+      font-size: 13px; z-index: 300;
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    #toast.show { opacity: 1; }
+
+    /* ─── Playing Equalizer Animation ───────────────────────────── */
+    .eq-bars { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+    .eq-bar {
+      width: 3px; background: var(--accent2); border-radius: 2px;
+      animation: eq 0.6s ease-in-out infinite alternate;
+    }
+    .eq-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+    .eq-bar:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+    .eq-bar:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+    @keyframes eq { from { transform: scaleY(.4); } to { transform: scaleY(1); } }
+
+    /* ─── Mobile Responsive ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #sidebar { display: none; }
+      #main-content { left: 0; }
+      #mini-player { left: 0; bottom: var(--nav-h); }
+      #bottom-nav { display: flex; }
+      .screen { padding: 20px 16px 0; }
+      .quick-grid { grid-template-columns: 1fr; }
+      .fp-art { width: min(280px, 80vw); height: min(280px, 80vw); }
+      .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 769px) {
+      #bottom-nav { display: none !important; }
+    }
+
+    /* ─── Bottom Nav (mobile) ────────────────────────────────────── */
+    #bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+      flex-direction: row; align-items: center; justify-content: space-around;
+    }
+    .bn-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px;
+      cursor: pointer; color: var(--text3); font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      padding: 8px;
+    }
+    .bn-item.active { color: var(--accent2); }
+    .bn-item .bn-icon { font-size: 20px; }
+
+    /* ─── Volume bar ─────────────────────────────────────────────── */
+    .fp-vol-wrap { display: flex; align-items: center; gap: 10px; padding: 0 24px 8px; }
+    .fp-vol-icon { font-size: 16px; color: var(--text3); }
+    .fp-vol-bar { -webkit-appearance: none; appearance: none; flex: 1; height: 4px; border-radius: 99px; background: var(--surface3); outline: none; cursor: pointer; }
+    .fp-vol-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--text3); cursor: pointer; }
+
+    /* ─── Download Screen ────────────────────────────────────────── */
+    .dl-hero {
+      background: linear-gradient(135deg, #1a0a3e 0%, #0d0d14 50%, #0d1a0e 100%);
+      border-radius: var(--radius);
+      padding: 48px 36px;
+      display: flex; align-items: center; gap: 48px;
+      margin-bottom: 36px;
+      border: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .dl-hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(124,58,237,.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .dl-hero-left { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .dl-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,.2); border: 1px solid rgba(168,85,247,.4);
+      color: var(--accent3); padding: 5px 12px; border-radius: 99px;
+      font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .dl-hero-title {
+      font-size: 38px; font-weight: 900; line-height: 1.1;
+      margin-bottom: 10px; letter-spacing: -.8px;
+    }
+    .dl-hero-title span { color: var(--accent2); }
+    .dl-hero-sub { font-size: 15px; color: var(--text2); margin-bottom: 28px; line-height: 1.6; max-width: 420px; }
+    .dl-btn-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .dl-main-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; border-radius: var(--radius);
+      padding: 14px 28px; font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: all .2s;
+      box-shadow: 0 8px 24px rgba(124,58,237,.45);
+      text-decoration: none; letter-spacing: .2px;
+    }
+    .dl-main-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,.6); }
+    .dl-main-btn:active { transform: translateY(0); }
+    .dl-main-btn .dl-icon { font-size: 20px; }
+    .dl-ios-btn { background: linear-gradient(135deg, #1c1c1e, #3a3a3c); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+    .dl-ios-btn:hover { box-shadow: 0 12px 32px rgba(0,0,0,.6); }
+
+    /* Platform cards */
+    .dl-platform-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .dl-platform-card {
+      flex: 1; min-width: 160px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
       border-radius: 16px;
-      padding: 24px 40px;
+      padding: 20px 16px;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+    }
+    .dl-platform-card-ios { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); }
+    .dl-platform-icon { font-size: 28px; }
+    .dl-platform-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .dl-platform-req { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+    .dl-free-note { font-size: 12px; color: var(--text3); margin-top: 4px; }
+    .dl-meta { font-size: 12px; color: var(--text3); display: flex; flex-direction: column; gap: 3px; }
+    .dl-meta span { display: flex; align-items: center; gap: 5px; }
+    .dl-phone-wrap {
+      width: 160px; flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .dl-phone {
+      width: 140px; background: var(--surface2);
+      border-radius: 24px; border: 2px solid var(--border);
+      padding: 12px 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.05);
+      margin: 0 auto;
+    }
+    .dl-phone-screen {
+      background: var(--bg); border-radius: 14px; overflow: hidden;
+      aspect-ratio: 9/16;
+      display: flex; flex-direction: column;
+    }
+    .dl-phone-top {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      padding: 8px 6px; text-align: center;
+    }
+    .dl-phone-top .pt { font-size: 7px; font-weight: 700; color: #fff; }
+    .dl-phone-songs { flex: 1; padding: 4px; display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+    .dl-mini-song {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--surface2); border-radius: 4px; padding: 3px 4px;
+    }
+    .dl-mini-dot { width: 18px; height: 18px; border-radius: 3px; background: linear-gradient(135deg, var(--accent), var(--accent2)); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; }
+    .dl-mini-txt { font-size: 6px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dl-phone-player {
+      background: var(--surface2); padding: 5px 6px; border-top: 1px solid var(--border);
+    }
+    .dl-phone-player .pp { display: flex; align-items: center; justify-content: space-between; }
+    .dl-phone-player .pt2 { font-size: 6px; color: var(--text2); }
+    .dl-phone-player .pb { display: flex; justify-content: center; gap: 8px; margin-top: 3px; font-size: 10px; }
+
+    /* Stats row */
+    .dl-stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+      margin-bottom: 32px;
+    }
+    .dl-stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 18px;
+      text-align: center;
+    }
+    .dl-stat-num { font-size: 28px; font-weight: 800; color: var(--text); }
+    .dl-stat-num.count-num { color: var(--accent2); }
+    .dl-stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+    /* How to install */
+    .dl-steps { margin-bottom: 32px; }
+    .dl-steps h2 { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
+    .dl-steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .dl-step {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 18px;
+    }
+    .dl-step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; margin-bottom: 12px;
+    }
+    .dl-step-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .dl-step-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+    .dl-step-icon { font-size: 22px; margin-bottom: 8px; }
+
+    /* Features */
+    .dl-features h2 { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
+    .dl-features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+    .dl-feat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .dl-feat-icon { font-size: 26px; flex-shrink: 0; }
+    .dl-feat-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .dl-feat-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+    /* Download again CTA */
+    .dl-cta-banner {
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(168,85,247,.1));
+      border: 1px solid rgba(168,85,247,.3);
+      border-radius: var(--radius); padding: 28px 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      margin-bottom: 32px;
+    }
+    .dl-cta-text h3 { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+    .dl-cta-text p { font-size: 13px; color: var(--text2); }
+
+    /* Footer */
+    #site-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 28px 32px;
+      text-align: center;
       margin-top: 40px;
     }
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #ff4444;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+    .footer-inner { max-width: 800px; margin: 0 auto; }
+    .footer-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+    .footer-logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .footer-logo-text { font-size: 15px; font-weight: 700; }
+    .footer-dl-count {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 99px; padding: 8px 20px; margin-bottom: 16px;
+      font-size: 14px; font-weight: 600;
     }
-    .live-dot {
-      width: 8px; height: 8px;
-      background: #ff4444;
-      border-radius: 50%;
-      animation: pulse 1.2s infinite;
+    .footer-dl-count .count-icon { font-size: 18px; }
+    .footer-dl-count .count-number { color: var(--accent2); font-size: 18px; font-weight: 800; }
+    .footer-dl-count .count-label { color: var(--text2); }
+    .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; }
+    .footer-link { font-size: 13px; color: var(--text2); cursor: pointer; transition: color .15s; }
+    .footer-link:hover { color: var(--accent2); }
+    .footer-copy { font-size: 11px; color: var(--text3); }
+    .footer-disclaimer { font-size: 11px; color: var(--text3); margin-top: 6px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+    /* Download progress overlay */
+    #dl-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .25s;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    #dl-overlay.show { opacity: 1; pointer-events: all; }
+    .dl-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 36px 40px; text-align: center;
+      max-width: 400px; width: 90%;
+      box-shadow: 0 24px 60px rgba(0,0,0,.6);
     }
-    .counter-number {
-      font-size: clamp(32px, 6vw, 52px);
-      font-weight: 800;
-      font-family: "Courier New", monospace;
-      color: #4fc3f7;
-      letter-spacing: 2px;
+    .dl-modal-icon { font-size: 52px; margin-bottom: 14px; animation: bounce .6s ease infinite alternate; }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+    .dl-modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .dl-modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 22px; line-height: 1.6; }
+    .dl-progress-bar-wrap { background: var(--surface2); border-radius: 99px; height: 8px; margin-bottom: 10px; overflow: hidden; }
+    .dl-progress-bar-fill { height: 100%; background: linear-gradient(to right, var(--accent), var(--accent2)); border-radius: 99px; width: 0%; transition: width .1s linear; }
+    .dl-progress-pct { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+    .dl-modal-close {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); border-radius: var(--radius-sm);
+      padding: 10px 24px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .15s;
     }
-    .counter-label { font-size: 13px; color: #5a7a9a; margin-top: 6px; }
-    .features { padding: 80px 20px; max-width: 1000px; margin: 0 auto; }
-    .section-title {
-      text-align: center;
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 48px;
+    .dl-modal-close:hover { background: var(--surface3); }
+
+    /* Download nav highlight */
+    .nav-item.dl-nav { background: linear-gradient(135deg, rgba(124,58,237,.15), rgba(168,85,247,.08)); }
+    .nav-item.dl-nav:hover { background: linear-gradient(135deg, rgba(124,58,237,.3), rgba(168,85,247,.15)); }
+
+    @media (max-width: 768px) {
+      .dl-hero { flex-direction: column; padding: 28px 20px; text-align: center; }
+      .dl-hero-sub { margin-left: auto; margin-right: auto; }
+      .dl-btn-row { justify-content: center; }
+      .dl-phone-wrap { display: none; }
+      .dl-hero-title { font-size: 26px; }
+      .dl-stats-row { grid-template-columns: repeat(3, 1fr); }
+      .dl-steps-grid { grid-template-columns: 1fr; }
+      .dl-features-grid { grid-template-columns: 1fr; }
+      .dl-cta-banner { flex-direction: column; text-align: center; }
+      #site-footer { padding: 20px 16px; }
     }
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .feature-card {
-      background: #141a2e;
-      border: 1px solid #1e2a4a;
-      border-radius: 14px;
-      padding: 28px 24px;
-    }
-    .feature-icon { font-size: 30px; margin-bottom: 14px; }
-    .feature-card h3 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .feature-card p { font-size: 14px; color: #6a8aaa; line-height: 1.6; }
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      border-top: 1px solid #1e2540;
-      color: #4a6a8a;
-      font-size: 13px;
-    }
-    footer a { color: #7a9cc8; text-decoration: none; margin: 0 12px; }
-    footer a:hover { color: #fff; }
   </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html" class="logo">
-      <span>LIVE</span> YouTube Sub Counter
-    </a>
-    <a href="privacy-policy.html" class="pp-link">Privacy Policy</a>
-  </nav>
-  <section class="hero">
-    <h1>Track YouTube Subscribers<br /><em>Live, in Real Time</em></h1>
-    <p>Watch any YouTube channel’s subscriber and view counts update live with smooth animated counters, auto-refresh every second, and milestone tracking.</p>
-    <div class="badge-row">
-      <span class="badge">📱 Android</span>
-      <span class="badge">🆓 Free</span>
-      <span class="badge">⚡ Real-Time Updates</span>
-      <span class="badge">🌙 Dark Mode</span>
-    </div>
-    <a href="https://play.google.com/store/apps/details?id=com.balaji.youtubelivecounts" class="download-btn">
-      ▶ Get it on Google Play
-    </a>
-    <div class="counter-demo">
-      <div class="counter-box">
-        <div class="live-badge"><div class="live-dot"></div> LIVE SUBSCRIBERS</div>
-        <div class="counter-number">471,921,716</div>
-        <div class="counter-label">MrBeast · Updated just now</div>
+<div id="app">
+
+  <!-- ── Sidebar ───────────────────────────────────────────────── -->
+  <aside id="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🎵</div>
+      <div class="logo-text">
+        Telugu Christian<br>
+        <small>Worship Songs</small>
       </div>
     </div>
-  </section>
-  <section class="features">
-    <h2 class="section-title">Everything You Need</h2>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <h3>Quick Channel Search</h3>
-        <p>Search any YouTube channel by name, URL, or UC ID. Results appear instantly.</p>
+
+    <div class="nav-section">
+      <div class="nav-label">Discover</div>
+      <div class="nav-item active" onclick="showScreen('home')">
+        <span class="icon">🏠</span> Home
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Real-Time Counters</h3>
-        <p>Subscriber and view counts update every second with smooth odometer-style animations powered by multiple live data sources.</p>
+      <div class="nav-item" onclick="showScreen('search')">
+        <span class="icon">🔍</span> Search
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Full Channel Metrics</h3>
-        <p>View estimated subs, views, video count, daily gains, monthly gains and more — all in one dashboard.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🏆</div>
-        <h3>Milestone Tracker</h3>
-        <p>See how close a channel is to the next milestone (1K, 10K, 100K, 1M, 10M…) with a live progress bar.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎬</div>
-        <h3>Recent Videos</h3>
-        <p>Browse the channel’s latest uploads with view counts and publish times, directly in the app.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🌙</div>
-        <h3>Dark &amp; Light Theme</h3>
-        <p>Automatically follows your system theme. Looks great in both dark and light mode.</p>
+      <div class="nav-item" onclick="showScreen('library')">
+        <span class="icon">📚</span> Library
       </div>
     </div>
-  </section>
-  <footer>
-    <p style="margin-bottom:12px;">
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="mailto:factsyouwant8309@gmail.com">Contact</a>
-    </p>
-    <p>&copy; 2026 YouTube Live Sub Counter. All rights reserved.</p>
-  </footer>
+
+      <div class="nav-item dl-nav" onclick="showScreen('download')" id="nav-download">
+        <span class="icon">📥</span> Download App
+      </div>
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-label">Browse</div>
+      <div class="nav-item" onclick="filterByArtist('Raj Prakash Paul')">
+        <span class="icon">🎤</span> Raj Prakash Paul
+      </div>
+      <div class="nav-item" onclick="filterByArtist('Jessy Paul')">
+        <span class="icon">🎤</span> Jessy Paul
+      </div>
+      <div class="nav-item" onclick="filterByArtist('Robert Stoll')">
+        <span class="icon">🎤</span> Robert Stoll
+      </div>
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-label">Albums</div>
+      <div class="nav-item" onclick="filterByAlbum('Worship Conference 2024')">
+        <span class="icon">🙏</span> WC 2024
+      </div>
+      <div class="nav-item" onclick="filterByAlbum('Worship Conference 2022')">
+        <span class="icon">🙏</span> WC 2022
+      </div>
+      <div class="nav-item" onclick="filterByAlbum('Christmas 2025')">
+        <span class="icon">🎄</span> Christmas 2025
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Wrap ─────────────────────────────────────────────── -->
+  <div id="main-wrap">
+    <div id="main-content">
+
+      <!-- ═══ HOME SCREEN ════════════════════════════════════════ -->
+      <div id="home-screen" class="screen active">
+        <div class="greeting">
+          <h1 id="greeting-text">Good Evening 🙏</h1>
+          <p>Telugu Christian Worship Songs</p>
+        </div>
+
+        <!-- Quick tiles -->
+        <div class="quick-grid" id="quick-grid">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Featured Banner -->
+        <div class="featured-banner" id="featured-banner">
+          <div style="background:linear-gradient(135deg,#1a1a2e,#2d1b69);height:100%;display:flex;align-items:center;justify-content:center;">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <!-- Recently Added -->
+        <div class="section">
+          <div class="section-head">
+            <h2>✨ Recently Added</h2>
+            <span class="see-all" onclick="showScreen('library')">See all</span>
+          </div>
+          <div class="h-scroll" id="recently-added">
+            <div class="loader"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+        <!-- Popular Now -->
+        <div class="section">
+          <div class="section-head">
+            <h2>🔥 Popular Now</h2>
+            <span class="see-all" onclick="showScreen('library')">See all</span>
+          </div>
+          <div id="popular-now">
+            <div class="loader"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SEARCH SCREEN ══════════════════════════════════════ -->
+      <div id="search-screen" class="screen">
+        <div class="screen-header">
+          <div><div class="screen-title">Search</div><div class="screen-sub">Find your worship songs</div></div>
+        </div>
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Songs, artists, albums…" oninput="onSearch()" />
+          <button class="clear-btn" id="clear-btn" onclick="clearSearch()">✕</button>
+        </div>
+        <div id="categories-section">
+          <div class="section-head"><h2>Browse Categories</h2></div>
+          <div class="categories-grid">
+            <div class="cat-chip" onclick="filterCategory('worship')"><span class="cat-emoji">🙏</span>Worship</div>
+            <div class="cat-chip" onclick="filterCategory('praise')"><span class="cat-emoji">🎶</span>Praise</div>
+            <div class="cat-chip" onclick="filterCategory('devotional')"><span class="cat-emoji">💫</span>Devotional</div>
+            <div class="cat-chip" onclick="filterCategory('christmas')"><span class="cat-emoji">🎄</span>Christmas</div>
+            <div class="cat-chip" onclick="filterCategory('telugu')"><span class="cat-emoji">🌺</span>Telugu</div>
+            <div class="cat-chip" onclick="filterCategory('christian')"><span class="cat-emoji">✝️</span>Christian</div>
+          </div>
+        </div>
+        <div id="search-results">
+          <div class="section-head"><h2>All Songs</h2></div>
+          <div id="search-list"></div>
+        </div>
+      </div>
+
+      <!-- ═══ LIBRARY SCREEN ════════════════════════════════════ -->
+      <div id="library-screen" class="screen">
+        <div class="screen-header">
+          <div><div class="screen-title">Library</div><div class="screen-sub" id="lib-count"></div></div>
+        </div>
+        <div class="lib-tabs">
+          <div class="lib-tab active" onclick="switchLibTab('songs')">All Songs</div>
+          <div class="lib-tab" onclick="switchLibTab('artists')">Artists</div>
+          <div class="lib-tab" onclick="switchLibTab('albums')">Albums</div>
+        </div>
+        <div id="lib-songs" class="lib-panel active">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+        <div id="lib-artists" class="lib-panel"></div>
+        <div id="lib-albums" class="lib-panel"></div>
+      </div>
+
+      <!-- ═══ DOWNLOAD SCREEN ══════════════════════════════════ -->
+      <div id="download-screen" class="screen">
+
+        <!-- Hero -->
+        <div class="dl-hero">
+          <div class="dl-hero-left">
+            <div class="dl-badge">📱 Android &amp; iOS · Free Download</div>
+            <div class="dl-hero-title">Telugu Christian<br><span>Worship Songs</span></div>
+            <div class="dl-hero-sub">Stream 65+ worship songs by Raj Prakash Paul, Jessy Paul &amp; Robert Stoll. Fully offline. Completely free.</div>
+
+            <!-- Platform download cards -->
+            <div class="dl-platform-row">
+              <!-- Android -->
+              <div class="dl-platform-card">
+                <div class="dl-platform-icon">🤖</div>
+                <div class="dl-platform-name">Android</div>
+                <div class="dl-platform-req">Android 6.0+ · 6.6 MB</div>
+                <a class="dl-main-btn" id="hero-dl-btn" href="app-release.apk" download="TeluguChristianSongs.apk" onclick="handleDownload()">
+                  <span class="dl-icon">⬇</span> Download APK
+                </a>
+              </div>
+              <!-- iOS -->
+              <div class="dl-platform-card dl-platform-card-ios">
+                <div class="dl-platform-icon">🍎</div>
+                <div class="dl-platform-name">iPhone / iPad</div>
+                <div class="dl-platform-req">iOS 16+ · Beta via TestFlight</div>
+                <a class="dl-main-btn dl-ios-btn" href="https://testflight.apple.com/join/Ft5yk515" target="_blank" rel="noopener">
+                  <span class="dl-icon">🍎</span> Join TestFlight
+                </a>
+              </div>
+            </div>
+
+            <div class="dl-free-note">🆓 Free · No account needed · No ads on iOS</div>
+          </div>
+          <!-- Phone mockup -->
+          <div class="dl-phone-wrap">
+            <div class="dl-phone">
+              <div class="dl-phone-screen">
+                <div class="dl-phone-top"><div class="pt">🎵 Telugu Christian Songs</div></div>
+                <div class="dl-phone-songs" id="dl-phone-songs">
+                  <div class="dl-mini-song"><div class="dl-mini-dot">🎵</div><div class="dl-mini-txt">Naa Yogyataku Minchina</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">🎶</div><div class="dl-mini-txt">Rajadhi Raju Mahimaanvithudu</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">✝️</div><div class="dl-mini-txt">Aradhana Yesu Neeke</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">🙏</div><div class="dl-mini-txt">Mahima Neeke Ganatha Neeke</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">💫</div><div class="dl-mini-txt">Yeshua</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">🎵</div><div class="dl-mini-txt">Keerthi Hallelujah</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">🎶</div><div class="dl-mini-txt">Manasara Pujinchi</div></div>
+                  <div class="dl-mini-song"><div class="dl-mini-dot">✝️</div><div class="dl-mini-txt">Madhura Sneham</div></div>
+                </div>
+                <div class="dl-phone-player">
+                  <div class="pp"><span class="pt2">▶ Now Playing</span><span style="font-size:6px;color:#a855f7">●●●</span></div>
+                  <div class="pb">⏮ ⏸ ⏭</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="dl-stats-row">
+          <div class="dl-stat-card">
+            <div class="dl-stat-num">65+</div>
+            <div class="dl-stat-label">🎵 Worship Songs</div>
+          </div>
+          <div class="dl-stat-card">
+            <div class="dl-stat-num">3</div>
+            <div class="dl-stat-label">🎤 Featured Artists</div>
+          </div>
+          <div class="dl-stat-card">
+            <div class="dl-stat-num count-num" id="dl-stat-count">—</div>
+            <div class="dl-stat-label">📥 Total Downloads</div>
+          </div>
+        </div>
+
+        <!-- How to Install -->
+        <div class="dl-steps">
+          <h2>📲 How to Install</h2>
+          <div class="dl-steps-grid">
+            <div class="dl-step">
+              <div class="dl-step-icon">⬇️</div>
+              <div class="dl-step-num">1</div>
+              <div class="dl-step-title">Download the APK</div>
+              <div class="dl-step-desc">Tap the Download APK button above. The file (6.6 MB) will save to your Downloads folder.</div>
+            </div>
+            <div class="dl-step">
+              <div class="dl-step-icon">⚙️</div>
+              <div class="dl-step-num">2</div>
+              <div class="dl-step-title">Allow Unknown Sources</div>
+              <div class="dl-step-desc">Go to Settings → Security → enable "Install from Unknown Sources" or allow your browser to install apps.</div>
+            </div>
+            <div class="dl-step">
+              <div class="dl-step-icon">🎵</div>
+              <div class="dl-step-num">3</div>
+              <div class="dl-step-title">Open &amp; Enjoy</div>
+              <div class="dl-step-desc">Tap the downloaded APK file to install, then open the app and start worshipping. No account needed.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="dl-features">
+          <h2>✨ App Features</h2>
+          <div class="dl-features-grid">
+            <div class="dl-feat">
+              <div class="dl-feat-icon">🎵</div>
+              <div>
+                <div class="dl-feat-title">65+ Worship Songs</div>
+                <div class="dl-feat-desc">Stream Telugu Christian songs by Raj Prakash Paul, Jessy Paul &amp; Robert Stoll — all in one app.</div>
+              </div>
+            </div>
+            <div class="dl-feat">
+              <div class="dl-feat-icon">📶</div>
+              <div>
+                <div class="dl-feat-title">Offline Downloads</div>
+                <div class="dl-feat-desc">Download songs to listen without internet. Up to 2 downloads free per day with offline access.</div>
+              </div>
+            </div>
+            <div class="dl-feat">
+              <div class="dl-feat-icon">🔍</div>
+              <div>
+                <div class="dl-feat-title">Smart Search</div>
+                <div class="dl-feat-desc">Instantly find songs by title, artist, album or category with live search results.</div>
+              </div>
+            </div>
+            <div class="dl-feat">
+              <div class="dl-feat-icon">📂</div>
+              <div>
+                <div class="dl-feat-title">Personal Playlists</div>
+                <div class="dl-feat-desc">Create your own playlists, like songs, and track your recently played history.</div>
+              </div>
+            </div>
+            <div class="dl-feat">
+              <div class="dl-feat-icon">🔀</div>
+              <div>
+                <div class="dl-feat-title">Shuffle &amp; Repeat</div>
+                <div class="dl-feat-desc">Full playback controls with shuffle, repeat, queue display and background playback.</div>
+              </div>
+            </div>
+            <div class="dl-feat">
+              <div class="dl-feat-icon">🆓</div>
+              <div>
+                <div class="dl-feat-title">Free to Use</div>
+                <div class="dl-feat-desc">Completely free with no account required. Premium subscription available to remove ads.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <div class="dl-cta-banner">
+          <div class="dl-cta-text">
+            <h3>Ready to start worshipping?</h3>
+            <p>Download the app for free and carry Telugu Christian worship songs everywhere you go.</p>
+          </div>
+          <a class="dl-main-btn" href="app-release.apk" download="TeluguChristianSongs.apk" onclick="handleDownload()">
+            <span class="dl-icon">⬇</span> Download Free
+          </a>
+        </div>
+
+      </div><!-- /download-screen -->
+
+    <!-- ─── Site Footer ──────────────────────────────────────────── -->
+    <footer id="site-footer">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <div class="footer-logo-icon">🎵</div>
+          <div class="footer-logo-text">Telugu Christian Worship Songs</div>
+        </div>
+        <div class="footer-dl-count">
+          <span class="count-icon">📥</span>
+          <span class="count-number" id="footer-dl-count">—</span>
+          <span class="count-label">total downloads</span>
+        </div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="showScreen('home')">Home</span>
+          <span class="footer-link" onclick="showScreen('search')">Search</span>
+          <span class="footer-link" onclick="showScreen('library')">Library</span>
+          <span class="footer-link" onclick="showScreen('download')">Download App</span>
+        </div>
+        <div class="footer-copy">© 2025 Telugu Christian Worship Songs. All rights reserved.</div>
+        <div class="footer-disclaimer">All songs are unofficial community worship recordings shared freely within the Telugu Christian community. All content belongs to respective creators. Not affiliated with any artist or organisation.</div>
+      </div>
+    </footer>
+
+    </div><!-- /main-content -->
+
+    <!-- ── Mini Player ─────────────────────────────────────────── -->
+    <div id="mini-player" onclick="openFullPlayer()">
+      <img src="" alt="" class="mp-thumb" id="mp-thumb" />
+      <div class="mp-info">
+        <div class="mp-title" id="mp-title">—</div>
+        <div class="mp-artist" id="mp-artist">—</div>
+      </div>
+      <button class="mp-like-btn" id="mp-like" onclick="event.stopPropagation();toggleLike()" title="Like">♡</button>
+      <div class="mp-controls" onclick="event.stopPropagation()">
+        <button class="mp-btn" onclick="prevSong()" title="Previous">⏮</button>
+        <button class="mp-btn play-btn" id="mp-play" onclick="togglePlay()" title="Play/Pause">▶</button>
+        <button class="mp-btn" onclick="nextSong()" title="Next">⏭</button>
+      </div>
+      <div class="mp-progress"><div class="mp-progress-fill" id="mp-progress-fill"></div></div>
+    </div>
+
+  </div><!-- /main-wrap -->
+</div><!-- /app -->
+
+<!-- ── Bottom Nav (mobile) ──────────────────────────────────────── -->
+<nav id="bottom-nav">
+  <div class="bn-item active" id="bn-home" onclick="showScreen('home')">
+    <span class="bn-icon">🏠</span> Home
+  </div>
+  <div class="bn-item" id="bn-search" onclick="showScreen('search')">
+    <span class="bn-icon">🔍</span> Search
+  </div>
+  <div class="bn-item" id="bn-library" onclick="showScreen('library')">
+    <span class="bn-icon">📚</span> Library
+  </div>
+  <div class="bn-item" id="bn-download" onclick="showScreen('download')" style="color:#a855f7;">
+    <span class="bn-icon">📥</span> Download
+  </div>
+</nav>
+
+<!-- ── Full Player Overlay ──────────────────────────────────────── -->
+<div id="full-player">
+  <div class="fp-header">
+    <button class="fp-down-btn" onclick="closeFullPlayer()">⌃</button>
+    <div class="fp-context" id="fp-context">Now Playing</div>
+    <button class="fp-more-btn">•••</button>
+  </div>
+  <div class="fp-art-wrap">
+    <img src="" alt="" class="fp-art" id="fp-art" />
+  </div>
+  <div class="fp-info-bar">
+    <div>
+      <div class="fp-title" id="fp-title">—</div>
+      <div class="fp-artist" id="fp-artist">—</div>
+    </div>
+    <button class="fp-like-btn" id="fp-like" onclick="toggleLike()">♡</button>
+  </div>
+  <div class="fp-seekbar-wrap">
+    <input type="range" class="fp-seekbar" id="fp-seekbar" min="0" max="100" value="0" oninput="onSeek()" />
+  </div>
+  <div class="fp-time">
+    <span id="fp-current">0:00</span>
+    <span id="fp-duration">0:00</span>
+  </div>
+  <div class="fp-vol-wrap">
+    <span class="fp-vol-icon">🔈</span>
+    <input type="range" class="fp-vol-bar" id="fp-vol" min="0" max="100" value="80" oninput="setVolume()" />
+    <span class="fp-vol-icon">🔊</span>
+  </div>
+  <div class="fp-controls">
+    <button class="fp-ctrl-btn" id="fp-shuffle" onclick="toggleShuffle()" title="Shuffle">🔀</button>
+    <button class="fp-ctrl-btn" onclick="prevSong()" title="Previous">⏮</button>
+    <button class="fp-ctrl-btn fp-play-btn" id="fp-play" onclick="togglePlay()" title="Play/Pause">▶</button>
+    <button class="fp-ctrl-btn" onclick="nextSong()" title="Next">⏭</button>
+    <button class="fp-ctrl-btn" id="fp-repeat" onclick="toggleRepeat()" title="Repeat">🔁</button>
+  </div>
+</div>
+
+<!-- Download Progress Modal -->
+<div id="dl-overlay">
+  <div class="dl-modal">
+    <div class="dl-modal-icon">📥</div>
+    <div class="dl-modal-title">Downloading…</div>
+    <div class="dl-modal-sub">Your APK is downloading. Once complete, open the file and tap Install to set up your worship app.</div>
+    <div class="dl-progress-bar-wrap"><div class="dl-progress-bar-fill" id="dl-bar"></div></div>
+    <div class="dl-progress-pct" id="dl-pct">Starting…</div>
+    <button class="dl-modal-close" onclick="closeDlOverlay()">Got it</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Hidden audio element -->
+<audio id="audio-player" preload="metadata"></audio>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════════
+const FIREBASE_API_KEY = 'AIzaSyDUROOqRICa9f1Q73af9j0-__u38ia6dOw';
+const PROJECT_ID       = 'telugumusic';
+const CDN_BASE         = 'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/';
+const FIRESTORE_BASE   = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+// ═══════════════════════════════════════════════════════════
+//  EMBEDDED FALLBACK DATA  (songs_draft.json subset)
+// ═══════════════════════════════════════════════════════════
+const FALLBACK_SONGS = [
+  { id:'01', title:'Naa Yogyataku Minchina', artist:'Raj Prakash Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/HgVb4fXMTaE/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/న-యగయతక-మచన-heart-touching-song-raj-prakash-paul-wordofgodtelugu.mp3', duration_ms:633000, tags:['worship','devotional','telugu','christian'], youtube_id:'HgVb4fXMTaE' },
+  { id:'02', title:'Nee Kosame Naa Jeevitham', artist:'Robert Stoll', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/Ai8ZamCxF8U/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/nee-kosame-na-jeevitham-న-కసమ-న-జవత-new-song-by-robert-stoll-2025.mp3', duration_ms:362000, tags:['worship','devotional','telugu','christian'], youtube_id:'Ai8ZamCxF8U' },
+  { id:'03', title:'Rajadhi Raju Mahimaanvithudu', artist:'Raj Prakash Paul, Jessy Paul & Robert Stoll', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/fycItvo_Eyg/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/rajadhi-raju-mahimaanvithudu-song-raj-prakash-paul-jessy-paul-robert-stoll-siluv.mp3', duration_ms:415000, tags:['worship','praise','telugu','christian'], youtube_id:'fycItvo_Eyg' },
+  { id:'04', title:'Na Yesu Manchivaadu', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/vAcJLimZu80/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/na-yesu-manchivaadu-x-the-saviorrajprakashpaul-jessypauln-teluguchristiansongs-r.mp3', duration_ms:596000, tags:['worship','devotional','telugu','christian'], youtube_id:'vAcJLimZu80' },
+  { id:'05', title:'The Saviour Song', artist:'Raj Prakash Paul & Robert Stoll', album:'Christmas 2025', thumbnail_url:'https://i.ytimg.com/vi/4hlTOBfJDZI/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/the-saviour-song-by-raj-prakash-paul-robert-stoll-latest-telugu-christmas-song-2.mp3', duration_ms:434000, tags:['christmas','worship','telugu','christian'], youtube_id:'4hlTOBfJDZI' },
+  { id:'06', title:'Mahima Neeke Ganatha Neeke', artist:'Raj Prakash Paul, Jessy Paul & Robert Stoll', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/vs_oJwd1ox8/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/మహమ-నక-ఘనత-నక-mahima-neeke-ganatha-neeke-robert-stoll-psraj-prakash-paul-ps-jess.mp3', duration_ms:265000, tags:['worship','praise','telugu','christian'], youtube_id:'vs_oJwd1ox8' },
+  { id:'07', title:'My Daddy My Daddy', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/DnA2-QjAJwo/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/my-daddy-my-daddy-your-baby-is-singing-song-by-rajprakash-pauljessy-paul.mp3', duration_ms:458000, tags:['worship','devotional','telugu','christian'], youtube_id:'DnA2-QjAJwo' },
+  { id:'08', title:'Margam Nene Annadu Yesu', artist:'Raj Prakash Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/7MO2DaAZ46U/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/margam-nene-annadu-yesu-telugu-christian-song-raj-prakash-paul.mp3', duration_ms:801000, tags:['worship','devotional','telugu','christian'], youtube_id:'7MO2DaAZ46U' },
+  { id:'09', title:'Premapurnudu Prana Nadhudu', artist:'Raj Prakash Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/_Phk1qoEShs/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/premapurnudu-prana-nadhudu-పరమ-పరణడ-పరణ-నథడ-telugu-christian-song-raj-prakash-pa.mp3', duration_ms:636000, tags:['worship','devotional','telugu','christian'], youtube_id:'_Phk1qoEShs' },
+  { id:'10', title:'Manasara Pujinchi', artist:'Raj Prakash Paul & Jessy Paul', album:'Worship Conference 2024', thumbnail_url:'https://i.ytimg.com/vi/vVwnS_BQunY/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/మనసర-పజచ-manasara-pujinchi-worship-conference-24-raj-prakash-paul-jessy-paul.mp3', duration_ms:431000, tags:['worship','devotional','telugu','christian'], youtube_id:'vVwnS_BQunY' },
+  { id:'11', title:'Maruvadhu Maruvadhu', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/2trTUIf-ID4/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/maruvadhu-maruvadhu-మరవదద-మరవదదbeautiful-full-song-ps-jessy-paul-psraj-prakash-p.mp3', duration_ms:341000, tags:['worship','devotional','telugu','christian'], youtube_id:'2trTUIf-ID4' },
+  { id:'12', title:'Aradhana Yesu Neeke', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/eId2qJXOm_0/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/aradhana-yesu-neeke-telugu-christian-song-jessy-paul-raj-prakash-paul.mp3', duration_ms:664000, tags:['worship','praise','telugu','christian'], youtube_id:'eId2qJXOm_0' },
+  { id:'13', title:'Keerthi Hallelujah', artist:'Raj Prakash Paul & Jessy Paul', album:'Worship Conference 2022', thumbnail_url:'https://i.ytimg.com/vi/wHxQ4AqIC-8/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/keerthi-hallelujah-worship-conference-22-telugu-christian-song-raj-prakash-paul-.mp3', duration_ms:268000, tags:['worship','praise','telugu','christian'], youtube_id:'wHxQ4AqIC-8' },
+  { id:'14', title:'Padithinayya Padithini', artist:'Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/TyTBs1ADccA/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/padithinayya-padithini-ne-premalone-padithini-telugu-christian-song-jessy-paul-c.mp3', duration_ms:507000, tags:['worship','devotional','telugu','christian'], youtube_id:'TyTBs1ADccA' },
+  { id:'15', title:'Nee Sannidhilo Santhoshamu', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/cow-QbiR4yA/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/nee-sannidhilo-santhoshamu-telugu-christian-song-raj-prakash-paul-jessy-paul-joh.mp3', duration_ms:454000, tags:['worship','devotional','telugu','christian'], youtube_id:'cow-QbiR4yA' },
+  { id:'16', title:'Yeshua', artist:'Raj Prakash Paul & Jessy Paul', album:'Worship Conference 2022', thumbnail_url:'https://i.ytimg.com/vi/FpVQ3E5RcT4/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/yeshua-raj-prakash-paul-jessy-paul-worship-conference-22-born-for-christ-officia.mp3', duration_ms:516000, tags:['worship','praise','telugu','christian'], youtube_id:'FpVQ3E5RcT4' },
+  { id:'17', title:'Mahimaku Paathrudaa', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/hwTXk7m4K3w/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/mahimaku-paathrudaa-raj-prakash-paul-jessy-paul-worship-series-born-for-christ-o.mp3', duration_ms:1165000, tags:['worship','praise','telugu','christian'], youtube_id:'hwTXk7m4K3w' },
+  { id:'18', title:'Madhura Sneham', artist:'Raj Prakash Paul & Jessy Paul', album:'Worship Conference 2024', thumbnail_url:'https://i.ytimg.com/vi/KkZB6Tm2fVg/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/madhura-sneham-worship-conference-24.mp3', duration_ms:724000, tags:['worship','devotional','telugu','christian'], youtube_id:'KkZB6Tm2fVg' },
+  { id:'19', title:'Priyathama Bandama', artist:'Raj Prakash Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/3EtUsnWIlxo/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/priyathama-bandama-song-by-raj-prakash-paul-anna.mp3', duration_ms:607000, tags:['worship','devotional','telugu','christian'], youtube_id:'3EtUsnWIlxo' },
+  { id:'20', title:'Ninnu Nenu Viduvanayya', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/luZDgokZA30/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/ninnu-nenu-viduvanayya-telugu-christiansong-raj-prakash-paul-jessy-paul-the-lord.mp3', duration_ms:302000, tags:['worship','devotional','telugu','christian'], youtube_id:'luZDgokZA30' },
+  { id:'21', title:'Deevinchave Samruddiga', artist:'Raj Prakash Paul & Jessy Paul', album:'Telugu Christian Songs', thumbnail_url:'https://i.ytimg.com/vi/K3bRM_RdD-w/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/దవచవ-సమదధగ-deevinchave-samruddiga-telugu-christian-song-jessy-paul-raj-prakash-p.mp3', duration_ms:908000, tags:['worship','devotional','telugu','christian'], youtube_id:'K3bRM_RdD-w' },
+  { id:'22', title:'Hosanna Padedhaa', artist:'Raj Prakash Paul & Jessy Paul', album:'Live Worship', thumbnail_url:'https://i.ytimg.com/vi/Wgz9YBhAVzY/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/hosanna-padedhaa.mp3', duration_ms:300000, tags:['worship','hosanna','praise','telugu','christian'], youtube_id:'Wgz9YBhAVzY' },
+  { id:'23', title:'Na Priya Yesu Ra', artist:'Raj Prakash Paul, Jessy Paul & Robert Stoll', album:'Worship Conference 2022', thumbnail_url:'https://i.ytimg.com/vi/eCIMiAOvOf8/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/na-priya-yesu-ra.mp3', duration_ms:320000, tags:['worship','yesu','devotional','telugu','christian'], youtube_id:'eCIMiAOvOf8' },
+  { id:'24', title:'Prabhu Yesu Naa Rakshaka', artist:'Raj Prakash Paul & Jessy Paul', album:'Live Worship', thumbnail_url:'https://i.ytimg.com/vi/KcO_Gq5CZ2s/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/prabhu-yesu-naa-rakshaka.mp3', duration_ms:280000, tags:['worship','yesu','devotional','telugu','christian'], youtube_id:'KcO_Gq5CZ2s' },
+  { id:'25', title:'Neetho Unte Jeevitham', artist:'Raj Prakash Paul & Robert Stoll', album:'Worship Conference 2024', thumbnail_url:'https://i.ytimg.com/vi/JbXV2wWeKks/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/neetho-unte-jeevitham.mp3', duration_ms:360000, tags:['worship','devotional','telugu','christian'], youtube_id:'JbXV2wWeKks' },
+  { id:'26', title:'O Prema Na Prema Neevey', artist:'Raj Prakash Paul & Jessy Paul', album:'Worship Conference 2024', thumbnail_url:'https://i.ytimg.com/vi/B9RL4dqu1ak/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/o-prema-na-prema-neevey.mp3', duration_ms:390000, tags:['worship','devotional','telugu','christian'], youtube_id:'B9RL4dqu1ak' },
+  { id:'27', title:'Nuvve Lekapothe Nenu Jeevinchalenu', artist:'Raj Prakash Paul & Jessy Paul', album:'Worship Conference 2024', thumbnail_url:'https://i.ytimg.com/vi/JNMeV4FS37I/hqdefault.jpg', r2_url:'https://pub-fd8edb839ed8460abeea900ecbd831b6.r2.dev/songs/nuvve-lekapothe-nenu-jeevinchalenu.mp3', duration_ms:380000, tags:['worship','devotional','telugu','christian'], youtube_id:'JNMeV4FS37I' }
+];
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let allSongs = [];
+let queue    = [];
+let queueIdx = 0;
+let shuffleOn = false;
+let repeatMode = 0; // 0=off 1=all 2=one
+let likedIds  = new Set(JSON.parse(localStorage.getItem('liked') || '[]'));
+let isSeeking = false;
+let currentScreen = 'home';
+let activeCategory = null;
+let shuffledQueue = [];
+
+const audio = document.getElementById('audio-player');
+
+// ═══════════════════════════════════════════════════════════
+//  FETCH SONGS FROM FIRESTORE
+// ═══════════════════════════════════════════════════════════
+async function fetchFirestorePage(pageToken) {
+  let url = `${FIRESTORE_BASE}/songs?key=${FIREBASE_API_KEY}&pageSize=100`;
+  if (pageToken) url += `&pageToken=${pageToken}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+function firestoreDocToSong(doc) {
+  const f = doc.fields || {};
+  const get = (k) => {
+    if (!f[k]) return '';
+    return f[k].stringValue ?? f[k].integerValue ?? f[k].doubleValue ?? '';
+  };
+  const tags = (f.tags?.arrayValue?.values || []).map(v => v.stringValue || '');
+  return {
+    id: doc.name.split('/').pop(),
+    title: get('title') || '(Unknown)',
+    artist: get('artist') || 'Unknown Artist',
+    album: get('album') || 'Telugu Christian Songs',
+    thumbnail_url: get('thumbnailUrl') || `https://i.ytimg.com/vi/${get('youtubeId')}/hqdefault.jpg`,
+    r2_url: get('audioUrl'),
+    duration_ms: Number(get('duration') || 0) * 1000 || Number(get('duration_ms') || 0),
+    tags,
+    playCount: Number(get('playCount') || 0),
+    youtube_id: get('youtubeId'),
+  };
+}
+
+async function fetchWithTimeout(url, ms) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+  try { const r = await fetch(url, { signal: ctrl.signal }); clearTimeout(timer); return r; }
+  catch(e) { clearTimeout(timer); throw e; }
+}
+
+async function loadSongs() {
+  // ── STEP 1: Render IMMEDIATELY with embedded fallback data ──────
+  allSongs = [...FALLBACK_SONGS];
+  queue    = [...allSongs];
+  initUI();                     // page shows instantly — no blank screen
+
+  // ── STEP 2: Try to enrich with Firestore (6s timeout) ──────────
+  try {
+    let songs = []; let token = null;
+    do {
+      const url = `${FIRESTORE_BASE}/songs?key=${FIREBASE_API_KEY}&pageSize=100${token ? '&pageToken=' + token : ''}`;
+      const res = await fetchWithTimeout(url, 6000);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const docs = data.documents || [];
+      songs.push(...docs.map(firestoreDocToSong));
+      token = data.nextPageToken || null;
+    } while (token);
+    if (songs.length > 0) {
+      allSongs = songs;
+      queue    = [...allSongs];
+      _songContexts = {};       // reset stale context registry
+      initUI();                 // silently re-render with full 65 songs
+    }
+  } catch (e) {
+    console.info('Firestore unavailable — showing embedded songs.', e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FORMAT HELPERS
+// ═══════════════════════════════════════════════════════════
+function fmtTime(ms) {
+  const s = Math.floor(ms / 1000), m = Math.floor(s / 60);
+  return `${m}:${String(s % 60).padStart(2, '0')}`;
+}
+function fmtSec(s) {
+  const m = Math.floor(s / 60);
+  return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+}
+function thumb(song) {
+  return song.thumbnail_url || `https://i.ytimg.com/vi/${song.youtube_id}/hqdefault.jpg`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UI INIT
+// ═══════════════════════════════════════════════════════════
+function initUI() {
+  renderHome();
+  renderSearch();
+  renderLibrary();
+  updateGreeting();
+}
+
+function updateGreeting() {
+  const h = new Date().getHours();
+  const g = h < 12 ? 'Good Morning 🙏' : h < 18 ? 'Good Afternoon 🙏' : 'Good Evening 🙏';
+  document.getElementById('greeting-text').textContent = g;
+}
+
+// ─── HOME ─────────────────────────────────────────────────
+function renderHome() {
+  renderQuickTiles();
+  renderFeatured();
+  renderRecentlyAdded();
+  renderPopularNow();
+}
+
+function renderQuickTiles() {
+  const top4 = [...allSongs].sort((a,b) => (b.playCount||0)-(a.playCount||0)).slice(0, 8);
+  document.getElementById('quick-grid').innerHTML = top4.slice(0,4).map(s => `
+    <div class="quick-tile" onclick="playSong('${s.id}', allSongs)">
+      <img src="${thumb(s)}" alt="" onerror="this.style.background='#2d1b69';this.src=''" />
+      <div class="quick-tile-info">
+        <div class="quick-tile-title">${s.title}</div>
+        <div class="quick-tile-artist">${s.artist.split('&')[0].trim()}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderFeatured() {
+  const featured = allSongs[Math.floor(Math.random() * Math.min(10, allSongs.length))];
+  document.getElementById('featured-banner').innerHTML = `
+    <img src="${thumb(featured)}" alt="${featured.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'" />
+    <div class="featured-overlay">
+      <div class="featured-badge">✨ Featured Song</div>
+      <div class="featured-title">${featured.title}</div>
+      <div class="featured-sub">${featured.artist} · ${featured.album}</div>
+      <button class="featured-btn" onclick="playSong('${featured.id}', allSongs)">▶ Play Now</button>
+    </div>
+  `;
+}
+
+function renderRecentlyAdded() {
+  const recent = [...allSongs].reverse().slice(0, 20);
+  document.getElementById('recently-added').innerHTML = recent.map(s => `
+    <div class="song-card" onclick="playSong('${s.id}', allSongs)">
+      <img src="${thumb(s)}" alt="" onerror="this.style.background='#2d1b69';this.src=''" style="width:140px;height:140px;border-radius:8px;object-fit:cover;display:block;margin-bottom:8px;" />
+      <div class="song-card-title">${s.title}</div>
+      <div class="song-card-artist">${s.artist.split('&')[0].trim()}</div>
+    </div>
+  `).join('');
+}
+
+function renderPopularNow() {
+  const popular = [...allSongs].sort((a,b) => (b.playCount||0)-(a.playCount||0)).slice(0, 10);
+  document.getElementById('popular-now').innerHTML = popular.map((s,i) => songListItem(s, i+1, allSongs)).join('');
+}
+
+// ─── SEARCH ───────────────────────────────────────────────
+function renderSearch() {
+  document.getElementById('lib-count').textContent = `${allSongs.length} songs`;
+  renderSearchList(allSongs);
+}
+
+function renderSearchList(songs) {
+  const el = document.getElementById('search-list');
+  if (!songs.length) { el.innerHTML = '<div class="no-results">No songs found</div>'; return; }
+  el.innerHTML = songs.map((s,i) => songListItem(s, i+1, songs)).join('');
+}
+
+function onSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  document.getElementById('clear-btn').style.display = q ? 'block' : 'none';
+  document.getElementById('categories-section').style.display = q ? 'none' : 'block';
+  activeCategory = null;
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+
+  if (!q) { renderSearchList(allSongs); return; }
+  const filtered = allSongs.filter(s =>
+    s.title.toLowerCase().includes(q) ||
+    s.artist.toLowerCase().includes(q) ||
+    s.album.toLowerCase().includes(q) ||
+    (s.tags||[]).some(t => t.toLowerCase().includes(q))
+  );
+  renderSearchList(filtered);
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('clear-btn').style.display = 'none';
+  document.getElementById('categories-section').style.display = 'block';
+  activeCategory = null;
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  renderSearchList(allSongs);
+}
+
+function filterCategory(cat) {
+  showScreen('search');
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  if (activeCategory === cat) { activeCategory = null; renderSearchList(allSongs); return; }
+  activeCategory = cat;
+  event.currentTarget && event.currentTarget.classList.add('active');
+  const filtered = allSongs.filter(s => (s.tags||[]).includes(cat));
+  renderSearchList(filtered);
+}
+
+// ─── LIBRARY ──────────────────────────────────────────────
+function renderLibrary() {
+  document.getElementById('lib-count').textContent = `${allSongs.length} songs`;
+
+  // All songs
+  document.getElementById('lib-songs').innerHTML = allSongs.map((s,i) => songListItem(s, i+1, allSongs)).join('');
+
+  // Artists
+  const artistMap = {};
+  allSongs.forEach(s => {
+    const artists = s.artist.split(/[,&]/).map(a => a.trim()).filter(Boolean);
+    artists.forEach(a => {
+      if (!artistMap[a]) artistMap[a] = { name:a, count:0, sample:s };
+      artistMap[a].count++;
+    });
+  });
+  document.getElementById('lib-artists').innerHTML = Object.values(artistMap).sort((a,b) => b.count-a.count).map(a => `
+    <div class="artist-card" onclick="filterByArtist('${a.name.replace(/'/g,"\\'")}')">
+      <div class="artist-avatar">🎤</div>
+      <div>
+        <div class="artist-name">${a.name}</div>
+        <div class="artist-count">${a.count} song${a.count!==1?'s':''}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Albums
+  const albumMap = {};
+  allSongs.forEach(s => {
+    const album = s.album || 'Telugu Christian Songs';
+    if (!albumMap[album]) albumMap[album] = { name:album, count:0, sample:s };
+    albumMap[album].count++;
+  });
+  document.getElementById('lib-albums').innerHTML = Object.values(albumMap).sort((a,b) => b.count-a.count).map(a => `
+    <div class="album-card" onclick="filterByAlbum('${a.name.replace(/'/g,"\\'")}')">
+      <img src="${thumb(a.sample)}" alt="${a.name}" class="album-cover" onerror="this.style.display='none'" />
+      <div>
+        <div class="album-name">${a.name}</div>
+        <div class="album-count">${a.count} song${a.count!==1?'s':''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchLibTab(tab) {
+  document.querySelectorAll('.lib-tab').forEach((t,i) => {
+    const tabs = ['songs','artists','albums'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.lib-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`lib-${tab}`).classList.add('active');
+}
+
+// ─── FILTER HELPERS ───────────────────────────────────────
+function filterByArtist(artist) {
+  showScreen('search');
+  const filtered = allSongs.filter(s => s.artist.toLowerCase().includes(artist.toLowerCase()));
+  document.getElementById('search-input').value = artist;
+  document.getElementById('clear-btn').style.display = 'block';
+  document.getElementById('categories-section').style.display = 'none';
+  document.getElementById('search-results').querySelector('h2').textContent = `🎤 ${artist}`;
+  renderSearchList(filtered);
+}
+
+function filterByAlbum(album) {
+  showScreen('search');
+  const filtered = allSongs.filter(s => (s.album||'').toLowerCase().includes(album.toLowerCase()));
+  document.getElementById('search-input').value = album;
+  document.getElementById('clear-btn').style.display = 'block';
+  document.getElementById('categories-section').style.display = 'none';
+  document.getElementById('search-results').querySelector('h2').textContent = `💿 ${album}`;
+  renderSearchList(filtered);
+}
+
+// ─── SONG CONTEXT REGISTRY  (avoids JSON in onclick) ─────
+let _songContexts = {};
+function registerCtx(ctxKey, songs) { _songContexts[ctxKey] = songs; return ctxKey; }
+function playFromCtx(id, ctxKey) { playSong(id, _songContexts[ctxKey] || allSongs); }
+
+// ─── SONG LIST ITEM ───────────────────────────────────────
+function songListItem(s, num, songList) {
+  const liked = likedIds.has(s.id);
+  const isPlaying = queue[queueIdx]?.id === s.id;
+  // Register context once per unique list pointer
+  const ctxKey = registerCtx('ctx_' + (songList === allSongs ? 'all' : songList.length + '_' + (songList[0]?.id||'')), songList);
+  return `
+    <div class="song-list-item ${isPlaying?'playing':''}" id="sli-${s.id}" onclick="playFromCtx('${s.id}','${ctxKey}')">
+      <div class="sli-num">${num}</div>
+      <div class="sli-playing-icon"><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div>
+      <img class="sli-thumb" src="${thumb(s)}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2244%22 height=%2244%22><rect width=%2244%22 height=%2244%22 fill=%22%232d1b69%22/><text y=%2232%22 x=%228%22 font-size=%2226%22>%F0%9F%8E%B5</text></svg>'" />
+      <div class="sli-info">
+        <div class="sli-title">${s.title}</div>
+        <div class="sli-artist">${s.artist}</div>
+      </div>
+      <div class="sli-duration">${fmtTime(s.duration_ms||0)}</div>
+      <button class="sli-like ${liked?'liked':''}" onclick="event.stopPropagation();toggleLikeById('${s.id}',this)">${liked?'♥':'♡'}</button>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PLAYBACK
+// ═══════════════════════════════════════════════════════════
+function playSong(id, songList) {
+  // Set queue to the provided list and find index
+  queue = Array.isArray(songList) ? songList : allSongs;
+  const idx = queue.findIndex(s => s.id === id);
+  if (idx === -1) return;
+  queueIdx = idx;
+  if (shuffleOn) buildShuffledQueue(idx);
+  loadCurrent();
+  audio.play().catch(() => {});
+}
+
+function loadCurrent() {
+  const s = queue[queueIdx];
+  if (!s) return;
+  audio.src = s.r2_url;
+  audio.load();
+  updatePlayerUI(s);
+  document.getElementById('mini-player').classList.add('visible');
+  highlightPlaying(s.id);
+}
+
+function updatePlayerUI(s) {
+  const t = thumb(s);
+  // Mini player
+  document.getElementById('mp-thumb').src = t;
+  document.getElementById('mp-title').textContent = s.title;
+  document.getElementById('mp-artist').textContent = s.artist;
+  // Full player
+  document.getElementById('fp-art').src = t;
+  document.getElementById('fp-title').textContent = s.title;
+  document.getElementById('fp-artist').textContent = s.artist;
+  document.getElementById('fp-context').textContent = s.album || 'Now Playing';
+  document.getElementById('fp-duration').textContent = fmtTime(s.duration_ms||0);
+  // Like state
+  const liked = likedIds.has(s.id);
+  document.getElementById('mp-like').textContent = liked ? '♥' : '♡';
+  document.getElementById('mp-like').classList.toggle('liked', liked);
+  document.getElementById('fp-like').textContent = liked ? '♥' : '♡';
+  document.getElementById('fp-like').classList.toggle('liked', liked);
+  // Page title
+  document.title = `${s.title} – Telugu Christian Songs`;
+}
+
+function highlightPlaying(id) {
+  document.querySelectorAll('.song-list-item').forEach(el => el.classList.remove('playing'));
+  document.getElementById(`sli-${id}`)?.classList.add('playing');
+}
+
+function togglePlay() {
+  if (audio.paused) audio.play();
+  else audio.pause();
+}
+
+function prevSong() {
+  if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+  const len = queue.length;
+  queueIdx = (queueIdx - 1 + len) % len;
+  loadCurrent(); audio.play();
+}
+
+function nextSong() {
+  if (repeatMode === 2) { audio.currentTime = 0; audio.play(); return; }
+  const len = queue.length;
+  queueIdx = (queueIdx + 1) % len;
+  loadCurrent(); audio.play();
+}
+
+function toggleShuffle() {
+  shuffleOn = !shuffleOn;
+  document.getElementById('fp-shuffle').classList.toggle('active', shuffleOn);
+  showToast(shuffleOn ? '🔀 Shuffle on' : 'Shuffle off');
+}
+
+function toggleRepeat() {
+  repeatMode = (repeatMode + 1) % 3;
+  const btn = document.getElementById('fp-repeat');
+  const icons = ['🔁','🔁','🔂'];
+  btn.textContent = icons[repeatMode];
+  btn.classList.toggle('active', repeatMode > 0);
+  const labels = ['Repeat off', 'Repeat all', 'Repeat one'];
+  showToast(labels[repeatMode]);
+}
+
+function buildShuffledQueue(currentIdx) {
+  shuffledQueue = [...queue];
+  for (let i = shuffledQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledQueue[i], shuffledQueue[j]] = [shuffledQueue[j], shuffledQueue[i]];
+  }
+}
+
+function onSeek() {
+  const val = document.getElementById('fp-seekbar').value;
+  audio.currentTime = (val / 100) * audio.duration;
+}
+
+function setVolume() {
+  audio.volume = document.getElementById('fp-vol').value / 100;
+}
+
+// ─── Like ─────────────────────────────────────────────────
+function toggleLike() {
+  const s = queue[queueIdx];
+  if (!s) return;
+  toggleLikeById(s.id, null);
+  updatePlayerUI(s);
+}
+
+function toggleLikeById(id, btn) {
+  if (likedIds.has(id)) {
+    likedIds.delete(id);
+    if (btn) { btn.textContent = '♡'; btn.classList.remove('liked'); }
+    showToast('Removed from Liked');
+  } else {
+    likedIds.add(id);
+    if (btn) { btn.textContent = '♥'; btn.classList.add('liked'); }
+    showToast('❤️ Added to Liked');
+  }
+  localStorage.setItem('liked', JSON.stringify([...likedIds]));
+  const s = queue[queueIdx];
+  if (s && s.id === id) updatePlayerUI(s);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  AUDIO EVENTS
+// ═══════════════════════════════════════════════════════════
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  document.getElementById('fp-seekbar').value = pct;
+  document.getElementById('mp-progress-fill').style.width = pct + '%';
+  document.getElementById('fp-current').textContent = fmtSec(audio.currentTime);
+});
+
+audio.addEventListener('ended', () => {
+  if (repeatMode === 2) { audio.currentTime = 0; audio.play(); return; }
+  if (repeatMode === 1 || queueIdx < queue.length - 1) nextSong();
+});
+
+audio.addEventListener('play', () => {
+  document.getElementById('mp-play').textContent = '⏸';
+  document.getElementById('fp-play').textContent = '⏸';
+  document.getElementById('full-player').classList.add('playing');
+});
+
+audio.addEventListener('pause', () => {
+  document.getElementById('mp-play').textContent = '▶';
+  document.getElementById('fp-play').textContent = '▶';
+  document.getElementById('full-player').classList.remove('playing');
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  const s = queue[queueIdx];
+  if (s) document.getElementById('fp-duration').textContent = fmtSec(audio.duration);
+});
+
+// ═══════════════════════════════════════════════════════════
+//  DOWNLOAD COUNTER  (Firebase Firestore REST)
+// ═══════════════════════════════════════════════════════════
+const STATS_DOC = `${FIRESTORE_BASE}/metadata/stats?key=${FIREBASE_API_KEY}`;
+
+async function fetchDownloadCount() {
+  try {
+    const res = await fetchWithTimeout(STATS_DOC, 5000);
+    if (!res.ok) return getLocalCount();
+    const data = await res.json();
+    const count = Number(data.fields?.downloadCount?.integerValue || 0);
+    setLocalCount(count);
+    return count;
+  } catch { return getLocalCount(); }
+}
+
+async function incrementDownloadCount() {
+  try {
+    // Firestore field transform — atomically increment by 1
+    const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:write?key=${FIREBASE_API_KEY}`;
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        writes: [{
+          transform: {
+            document: `projects/${PROJECT_ID}/databases/(default)/documents/metadata/stats`,
+            fieldTransforms: [{
+              fieldPath: 'downloadCount',
+              increment: { integerValue: '1' }
+            }]
+          }
+        }]
+      })
+    });
+    const newCount = getLocalCount() + 1;
+    setLocalCount(newCount);
+    return newCount;
+  } catch {
+    const newCount = getLocalCount() + 1;
+    setLocalCount(newCount);
+    return newCount;
+  }
+}
+
+function getLocalCount() { return Number(localStorage.getItem('dl_count') || '0'); }
+function setLocalCount(n) { localStorage.setItem('dl_count', String(n)); }
+
+function updateCountDisplays(count) {
+  const formatted = count >= 1000 ? (count/1000).toFixed(1) + 'K' : String(count);
+  document.getElementById('dl-stat-count').textContent = formatted;
+  document.getElementById('footer-dl-count').textContent = formatted;
+}
+
+async function handleDownload() {
+  // Show download modal with animated progress bar
+  const overlay = document.getElementById('dl-overlay');
+  const bar = document.getElementById('dl-bar');
+  const pct = document.getElementById('dl-pct');
+  overlay.classList.add('show');
+  bar.style.width = '0%';
+  pct.textContent = 'Starting…';
+  let p = 0;
+  const interval = setInterval(() => {
+    p += Math.random() * 18 + 4;
+    if (p >= 100) { p = 100; clearInterval(interval); pct.textContent = '✅ Download complete!'; bar.style.width = '100%'; return; }
+    bar.style.width = p + '%';
+    pct.textContent = Math.round(p) + '%';
+  }, 180);
+
+  // Increment counter
+  const newCount = await incrementDownloadCount();
+  updateCountDisplays(newCount);
+  showToast('📥 APK download started!');
+}
+
+function closeDlOverlay() {
+  document.getElementById('dl-overlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function showScreen(name) {
+  currentScreen = name;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(`${name}-screen`).classList.add('active');
+
+  // Sidebar nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (name === 'download') {
+    document.getElementById('nav-download')?.classList.add('active');
+  } else {
+    const idx = ['home','search','library'].indexOf(name);
+    if (idx >= 0) document.querySelectorAll('.nav-section:first-of-type .nav-item')[idx]?.classList.add('active');
+  }
+
+  // Bottom nav
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(`bn-${name}`)?.classList.add('active');
+
+  // Scroll to top
+  document.getElementById('main-content').scrollTo(0, 0);
+}
+
+function openFullPlayer() {
+  document.getElementById('full-player').classList.add('open');
+}
+
+function closeFullPlayer() {
+  document.getElementById('full-player').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SEEKBAR GRADIENT UPDATE
+// ═══════════════════════════════════════════════════════════
+function updateSeekbarGradient() {
+  const bar = document.getElementById('fp-seekbar');
+  if (!bar) return;
+  const pct = Number(bar.value);
+  bar.style.background = `linear-gradient(to right, var(--accent2) ${pct}%, var(--surface3) ${pct}%)`;
+}
+document.getElementById('fp-seekbar').addEventListener('input', updateSeekbarGradient);
+audio.addEventListener('timeupdate', updateSeekbarGradient);
+
+// ═══════════════════════════════════════════════════════════
+//  MEDIA SESSION (for OS media controls / lockscreen)
+// ═══════════════════════════════════════════════════════════
+function updateMediaSession(s) {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: s.title,
+    artist: s.artist,
+    album: s.album,
+    artwork: [{ src: thumb(s), sizes: '480x360', type: 'image/jpeg' }]
+  });
+  navigator.mediaSession.setActionHandler('play', () => audio.play());
+  navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+  navigator.mediaSession.setActionHandler('previoustrack', prevSong);
+  navigator.mediaSession.setActionHandler('nexttrack', nextSong);
+}
+audio.addEventListener('play', () => { const s = queue[queueIdx]; if (s) updateMediaSession(s); });
+
+// ═══════════════════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'ArrowRight') { audio.currentTime = Math.min(audio.duration, audio.currentTime + 10); }
+  if (e.code === 'ArrowLeft') { audio.currentTime = Math.max(0, audio.currentTime - 10); }
+  if (e.code === 'ArrowUp') { audio.volume = Math.min(1, audio.volume + 0.1); document.getElementById('fp-vol').value = audio.volume * 100; }
+  if (e.code === 'ArrowDown') { audio.volume = Math.max(0, audio.volume - 0.1); document.getElementById('fp-vol').value = audio.volume * 100; }
+  if (e.code === 'Escape') closeFullPlayer();
+});
+
+// ═══════════════════════════════════════════════════════════
+//  INITIAL LOAD
+// ═══════════════════════════════════════════════════════════
+loadSongs();
+fetchDownloadCount().then(updateCountDisplays);
+</script>
 </body>
 </html>
