@@ -1,0 +1,56 @@
+1. Introduction
+
+Status Saver for WhatsApp ("we", "our", or "the app") is developed by Ranjith. This Privacy Policy explains what information the app accesses, how it is used, and your rights as a user. By using this app, you agree to this policy.
+
+2. Information We Access
+
+a) Storage / Media Files
+The app requests access to your device storage solely to read WhatsApp and WhatsApp Business status files (.jpg, .png, .mp4) and to save copies of those files to your device at your explicit request. We do not upload, transmit, or share any of your media files.
+
+b) Notification Access (Optional)
+If you grant notification access, the app reads WhatsApp/WhatsApp Business notifications only to detect deleted messages. This data is stored locally on your device and is never sent to any server.
+
+c) No Account or Personal Data
+The app does not require you to create an account. We do not collect your name, email address, phone number, or any personally identifiable information.
+
+3. Data Storage
+
+All data (saved statuses, deleted message records, app settings) is stored locally on your device only. We do not operate any servers. We do not upload your files or usage data anywhere.
+
+4. Third-Party Services
+
+The app uses Google AdMob to display advertisements. AdMob may collect device identifiers and usage data for ad personalization purposes. This is governed by Google's Privacy Policy:
+👉 https://policies.google.com/privacy
+
+You can opt out of personalized ads at any time via your device settings:
+Settings → Google → Ads → Opt out of Ads Personalization
+
+5. Permissions Explained
+
+Permission	Why It Is Needed
+Read/Write External Storage	To read WhatsApp statuses and save files to your device
+Notification Listener	To detect and record deleted messages (optional, user-granted)
+Receive Boot Completed	To restart background monitoring after device reboot (only if auto-save is enabled)
+Foreground Service	To monitor for new statuses in the background when enabled
+Internet	Required by AdMob to load advertisements
+6. Background Service
+
+When the background monitoring feature is enabled by the user, the app runs a foreground service with a visible notification. This service can be stopped at any time by tapping "Stop" in the notification or by disabling the feature in Settings. The service automatically stops when you close the app.
+
+7. Children's Privacy
+
+This app is not directed at children under the age of 13. We do not knowingly collect personal information from children.
+
+8. Data Security
+
+Since all data is stored locally on your device, the security of your data depends on your device's security (screen lock, encryption, etc.). We do not transmit any data and therefore cannot be responsible for breaches of external systems.
+
+9. Changes to This Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected in the "Last updated" date at the top. Continued use of the app after changes constitutes acceptance of the updated policy.
+
+10. Contact Us
+
+If you have any questions or concerns about this Privacy Policy, please contact us at:
+
+📧 ranjithdaramalla@gmail.com
