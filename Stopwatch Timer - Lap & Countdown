@@ -1,0 +1,65 @@
+Privacy Policy — Stopwatch Timer - Lap & Countdown
+
+Last updated: April 21, 2026
+
+1. Overview
+
+Stopwatch Timer - Lap & Countdown ("the App") is developed by Ranjith. This Privacy Policy explains what data is collected, how it is used, and your rights as a user.
+
+2. Data We Collect
+
+We do not collect any personal data.
+
+All data created by you (lap times, session history, timer presets, Pomodoro records, and app settings) is stored only on your device and is never transmitted to any server.
+
+3. Advertising (Google AdMob)
+
+The App displays banner advertisements provided by Google AdMob. AdMob may collect and use data to show personalized ads, including:
+
+Device identifiers (Advertising ID)
+IP address and approximate location
+App usage information
+This data is collected and processed by Google, not by us. You can review Google's privacy policy at:
+https://policies.google.com/privacy
+
+To opt out of personalized ads, go to your device Settings → Google → Ads → Opt out of Ads Personalization.
+
+4. Permissions Used
+
+Permission	Purpose
+RECEIVE_BOOT_COMPLETED	Restart active timers after device reboot
+FOREGROUND_SERVICE	Keep stopwatch/timer running in the background
+POST_NOTIFICATIONS	Show timer alerts and stopwatch status
+VIBRATE	Vibrate on lap or timer completion
+USE_FULL_SCREEN_INTENT	Show timer alarm on lock screen
+WRITE_EXTERNAL_STORAGE	Export lap data as CSV (Android 9 and below only)
+No permission is used to collect or transmit personal information.
+
+5. Data Storage
+
+All app data (sessions, laps, settings, history) is stored locally in your device's internal storage using an encrypted Room database. No data is uploaded to any cloud or external server.
+
+6. Third-Party Services
+
+The App uses the following third-party service:
+
+Google AdMob — for in-app advertising
+Privacy policy: https://policies.google.com/privacy
+No other third-party SDKs, analytics tools, or tracking services are used.
+
+7. Children's Privacy
+
+The App is not directed at children under the age of 13. We do not knowingly collect data from children. If you believe a child has provided personal information through the App, please contact us and we will take steps to remove it.
+
+8. Changes to This Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected by the "Last updated" date at the top. Continued use of the App after changes constitutes your acceptance of the updated policy.
+
+9. Contact
+
+If you have any questions about this Privacy Policy, please contact:
+
+Developer: Ranjith
+Email: johnpaul93478@gmail.com
+App: Stopwatch Timer - Lap & Countdown
+Package: com.ranjith.stopwatchtimer
