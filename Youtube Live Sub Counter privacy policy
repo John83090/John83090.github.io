@@ -1,0 +1,86 @@
+# Privacy Policy for YouTube Live Sub Counter
+
+**Effective date:** [DATE — e.g. 28 April 2026]
+
+This policy describes what information the **YouTube Live Counts** Android
+app ("the app") collects, how it is used, and who it is shared with.
+
+## 1. Information the app collects
+
+The app itself does **not** ask you to sign in, create an account, or
+provide personal information. It does not request access to your contacts,
+photos, files, location, microphone, or camera. The only Android
+permission it uses is **Internet access**.
+
+The app does, however, include the **Google AdMob** advertising SDK, which
+automatically collects the following data type:
+
+- **Device or other IDs** — specifically your Android Advertising ID (a
+  resettable identifier provided by Google Play services).
+
+This identifier is collected and shared with Google so that AdMob can
+deliver advertising and detect invalid traffic and fraud. It is not used
+to identify you personally and you can reset or delete it at any time
+through your device's settings (**Settings → Privacy → Ads**).
+
+All data collected by the app is transmitted over encrypted (HTTPS)
+connections.
+
+## 2. How the data is used
+
+The Android Advertising ID collected via AdMob is used for:
+
+- Showing advertisements (including non-personalised ads where required).
+- Measuring ad performance.
+- Preventing fraud and invalid traffic.
+- Complying with applicable laws.
+
+The app itself does not log analytics, crash reports, or any other usage
+data on its own servers.
+
+## 3. Third-party services
+
+The app communicates with the following third parties:
+
+- **Google AdMob** — to display ads. Google's handling of this data is
+  governed by Google's Privacy Policy:
+  https://policies.google.com/privacy and
+  https://support.google.com/admob/answer/6128543.
+- **Public YouTube live-count APIs** (mixerno.space, socialcounts.org,
+  livecounts.io) — when you look up a channel, the channel handle or ID
+  you typed is sent to these services so they can return the channel's
+  current subscriber and view counts. These requests include your IP
+  address as part of normal HTTPS traffic but no other personal data.
+- **Google Play image CDN** (play-lh.googleusercontent.com) — used to
+  load the icons and screenshots shown on the "More apps" screen.
+
+The app does not share data with any other third party.
+
+## 4. Children
+
+The app is not directed at children under 13 and does not knowingly
+collect personal information from children under 13. If you believe a
+child has provided personal information through the app, please contact
+us at [YOUR EMAIL] and we will take appropriate action.
+
+## 5. Your choices
+
+- **Reset or delete your advertising ID:** Android Settings → Privacy →
+  Ads.
+- **Opt out of personalised ads:** same screen ("Opt out of Ads
+  Personalisation"), or via the in-app consent dialog if shown.
+- **Stop all data sharing:** uninstall the app.
+
+## 6. Data retention and deletion
+
+The app stores no personal data on its own servers. Data handled by
+Google AdMob is retained according to Google's policies linked above.
+To request deletion of any data associated with your advertising ID,
+contact us at [YOUR EMAIL] or use Google's controls at
+https://myaccount.google.com.
+
+## 7. Changes to this policy
+
+We may update this policy from time to time. The "Effective date" at the
+top of the page will reflect the latest revision. Continued use of the
+app after a change constitutes acceptance of the updated policy.
