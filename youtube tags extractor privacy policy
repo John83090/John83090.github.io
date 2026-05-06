@@ -1,0 +1,130 @@
+PRIVACY POLICY
+YouTube Tags Extractor
+Package: com.devshyam.youtubetagsextractor
+
+Effective Date: May 6, 2026
+Last Updated: May 6, 2026
+
+────────────────────────────────────────────────────────────────────────────────
+
+SUMMARY: We do not collect, store, or share any personal information.
+The app makes one HTTPS request to YouTube.com to fetch public video
+metadata. That is it.
+
+────────────────────────────────────────────────────────────────────────────────
+
+1. INTRODUCTION
+
+Welcome to YouTube Tags Extractor ("the App", "we", "our"). This Privacy
+Policy explains how the App handles information when you use it on your
+Android device.
+
+By using the App, you agree to this Privacy Policy. If you do not agree,
+please do not use the App.
+
+
+2. INFORMATION WE DO NOT COLLECT
+
+We do not collect, store, transmit, or have access to:
+
+- Your name, email address, phone number, or any contact information
+- Your Google account or YouTube account credentials
+- Your device's unique identifiers (IMEI, Android ID, GAID, etc.)
+- Your location data (GPS, IP-based, or otherwise)
+- Your browsing history or usage history within the App
+- Camera, microphone, contacts, or file system data
+- Analytics, crash reports, or behavioral data
+- Cookies or tracking pixels
+
+
+3. HOW THE APP WORKS
+
+YouTube Tags Extractor works as follows:
+
+1. You enter a YouTube video URL or video ID into the App.
+2. The App makes an HTTPS request directly to www.youtube.com to retrieve
+   the publicly available page for that video.
+3. The App parses the response on your device to extract the keywords
+   metadata embedded in every public YouTube video page.
+4. The extracted tags are displayed on your screen.
+
+Nothing is sent to any server other than YouTube.com. All processing
+happens locally on your device. We do not operate any server, backend,
+or database. We never see your requests.
+
+
+4. INTERNET PERMISSION
+
+The App requests the INTERNET permission solely to communicate with
+www.youtube.com. This connection is:
+
+- Made only when you tap "Extract Tags"
+- Directed exclusively to YouTube.com — no other domain
+- Used only to fetch publicly visible video metadata
+- Encrypted via HTTPS at all times
+
+
+5. THIRD-PARTY SERVICES
+
+The App does not integrate any of the following:
+
+- Advertising SDKs (AdMob, Facebook Audience Network, etc.)
+- Analytics SDKs (Firebase, Mixpanel, Amplitude, etc.)
+- Crash reporting tools (Crashlytics, Sentry, etc.)
+- Social login (Google Sign-In, Facebook Login, etc.)
+- Cloud databases or backend platforms
+
+The only external service the App contacts is YouTube.com, operated by
+Google LLC. Your interaction with YouTube.com is governed by Google's
+Privacy Policy: https://policies.google.com/privacy
+
+
+6. DATA SHARING
+
+Since we collect no personal data, there is nothing to share, sell, or
+disclose to any third party — and we never will.
+
+
+7. DATA SECURITY
+
+All network communication uses HTTPS (TLS encryption). No user data is
+stored on-device beyond what Android itself caches temporarily for
+network requests. The App does not create any local database or persistent
+storage of personal information.
+
+
+8. CHILDREN'S PRIVACY
+
+YouTube Tags Extractor is rated Everyone on Google Play and is suitable
+for all ages. Because we collect no personal information whatsoever, the
+App inherently complies with the Children's Online Privacy Protection Act
+(COPPA) and similar international regulations.
+
+We do not knowingly collect personal information from children under 13
+(or under 16 in the EU/EEA under GDPR). Since we collect no data at all,
+this is guaranteed by the App's design.
+
+
+9. YOUR RIGHTS (GDPR / CCPA)
+
+If you are a resident of the European Union, United Kingdom, or
+California, you have rights regarding your personal data under GDPR, UK
+GDPR, and CCPA respectively.
+
+Because we collect zero personal data, there is no data to access,
+correct, delete, or port. Your privacy rights are fully respected by
+default — there is simply no data to act on.
+
+
+10. CHANGES TO THIS PRIVACY POLICY
+
+We may update this Privacy Policy from time to time. Any changes will
+be reflected with an updated "Last Updated" date at the top of this
+document. Continued use of the App after changes are posted constitutes
+your acceptance of the revised policy.
+
+We will notify users of any material changes via the App's release notes
+on Google Play.
+────────────────────────────────────────────────────────────────────────────────
+© 2026 YouTube Tags Extractor · com.devshyam.youtubetagsextractor
+────────────────────────────────────────────────────────────────────────────────
