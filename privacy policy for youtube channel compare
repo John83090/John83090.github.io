@@ -1,1 +1,62 @@
 
+Privacy Policy
+
+Youtube Channel Compare
+Effective Date: May 8, 2026
+
+1. Introduction
+
+Youtube Channel Compare ("the App") is a free Android application that allows users to compare YouTube channel statistics in real time. This Privacy Policy explains how we handle information when you use the App.
+
+2. Information We Collect
+
+We do not collect, store, or share any personal information directly.
+
+The App does not require account registration, login, or any form of sign-in. We do not ask for your name, email address, phone number, or any other personally identifiable information.
+
+Data stored locally on your device:
+The App stores the following data on your device only:
+
+Channels you have marked as favourites
+Your comparison session history
+Your YouTube Data API key (if provided), stored locally and never transmitted to our servers
+App preferences and settings
+This data never leaves your device and is not accessible to us.
+
+3. Third-Party Services
+
+Google AdMob
+The App displays advertisements served by Google AdMob. AdMob may collect and use data to serve personalised or non-personalised ads, including:
+
+Device identifiers (Advertising ID)
+IP address
+General location (country/region)
+App usage data
+AdMob's data collection is governed by Google's Privacy Policy:
+https://policies.google.com/privacy
+
+You can opt out of personalised advertising by adjusting your device settings under Google Settings → Ads → Opt out of Ads Personalisation.
+
+YouTube Data API
+The App uses the YouTube Data API v3 (if you provide an API key) to search for and retrieve publicly available YouTube channel statistics. All data fetched is public information already visible on YouTube. We do not store this data on any server.
+
+YouTube's Terms of Service: https://www.youtube.com/t/terms
+Google's Privacy Policy: https://policies.google.com/privacy
+
+4. Internet Access
+
+The App requires internet access solely to:
+
+Fetch publicly available YouTube channel statistics
+Load and display advertisements
+5. Children's Privacy
+
+The App does not knowingly collect any information from children under the age of 13. The App displays only publicly available YouTube statistics and does not contain content directed at children.
+
+6. Data Security
+
+All data the App stores (favourites, history, API key) is kept locally on your device and is protected by your device's own security measures. We have no access to this data.
+
+7. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected with an updated effective date. Continued use of the App after changes constitutes your acceptance of the revised policy.
