@@ -1,0 +1,82 @@
+Privacy Policy for What Is My IP
+
+Effective date: May 30, 2026
+Last updated: May 30, 2026
+
+This Privacy Policy explains how the What Is My IP mobile application ("the App", "we", "us", or "our") handles information when you use it. We are committed to protecting your privacy. The App does not require an account, does not show ads, and does not include any analytics or tracking software.
+
+By using the App, you agree to the practices described in this policy.
+
+
+1. SUMMARY
+
+- We do not collect, store, or sell any personal information on our own servers.
+- The App has no user accounts, no ads, and no third-party analytics or advertising SDKs.
+- To show your IP details, the App sends requests to trusted third-party IP services. These requests necessarily include the IP address being looked up (your own, or one you search).
+- Location shown in the App is approximate and derived from an IP address - the App does NOT use your device's GPS.
+
+
+2. INFORMATION THE APP HANDLES
+
+The App's core purpose is to show information about an IP address. To do this, it processes:
+
+- Your public IP address (IPv4 and/or IPv6), retrieved when you open the App.
+- IP-based information returned by our service providers, such as approximate location (country, region, city, postal code, latitude/longitude, timezone), Internet Service Provider (ISP), organization, ASN, hostname, and connection flags (e.g., VPN/proxy, mobile, hosting/datacenter).
+- IP addresses you choose to search using the "IP Lookup" feature.
+
+This information is displayed to you on your device. We do not store it, log it, or transmit it to any server operated by us.
+
+
+3. THIRD-PARTY SERVICES
+
+To provide its features, the App makes requests to the following third-party services. When a request is made, the IP address being looked up is shared with that service so it can return the relevant data:
+
+- ipify (api.ipify.org) - Detects your public IP address - https://www.ipify.org/
+- ipwho.is - Provides geolocation & network details for an IP - https://ipwho.is/
+
+These services may process the IP address according to their own privacy policies. We encourage you to review them. We do not control and are not responsible for the practices of these third parties.
+
+
+4. PERMISSIONS
+
+The App requests only the minimum permissions needed to function:
+
+- Internet access (INTERNET) - to query the IP services above.
+- Network state (ACCESS_NETWORK_STATE) - to detect whether you are online and your connection type.
+- Wi-Fi state (ACCESS_WIFI_STATE) - to display network connection information.
+
+The App does NOT request access to your location (GPS), camera, microphone, contacts, photos, storage, or any other sensitive permission.
+
+
+5. DATA STORAGE AND RETENTION
+
+- The App does not maintain any backend server or database.
+- IP and network details are fetched in real time and shown on screen. They are not permanently stored by the App and are cleared when you refresh or close the App.
+- Any temporary data exists only in your device's memory during use.
+
+
+6. DATA SHARING AND SELLING
+
+We do not sell, rent, or share your personal information with anyone for marketing purposes. The only data transmission that occurs is the technical request to the IP service providers listed in Section 3, solely to provide the App's functionality.
+
+
+7. CHILDREN'S PRIVACY
+
+The App is a general-purpose utility and is not directed to children under 13 (or the equivalent minimum age in your jurisdiction). We do not knowingly collect personal information from children. The App does not collect personal information from any user.
+
+
+8. SECURITY
+
+Because we do not collect or store your data on our servers, there is no personal data held by us that could be exposed. Network requests made by the App use secure HTTPS connections.
+
+
+9. YOUR RIGHTS
+
+Since the App does not collect or store personal data about you, there is no personal data for us to access, modify, or delete. You can stop all data processing at any time by closing or uninstalling the App.
+
+Depending on your location, you may have rights under laws such as the GDPR or CCPA. As we hold no personal data, requests under these laws can be honored simply by ceasing use of the App. For questions, contact us using the details below.
+
+
+10. CHANGES TO THIS PRIVACY POLICY
+
+We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last updated" date. Continued use of the App after changes take effect constitutes acceptance of the revised policy.
