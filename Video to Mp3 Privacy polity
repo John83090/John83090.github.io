@@ -1,0 +1,41 @@
+Privacy Policy — Video to MP3 Converter
+
+Last updated: [DATE]
+
+[DEVELOPER / COMPANY NAME] ("we", "us", or "our") operates the Video to MP3 Converter mobile application (the "App"). This Privacy Policy explains how the App handles information when you use it. By using the App, you agree to this policy.
+
+The App is designed to do its core job — converting videos to audio — entirely on your device. We do not require an account, and we do not upload your videos or audio files to any server.
+
+1. Information we do NOT collect
+- We do not collect, store, or transmit your videos, audio files, or their contents. All conversion happens locally on your device.
+- We do not require you to register or provide personal information (such as your name or email) to use the App.
+- We do not sell your personal information.
+
+2. Information stored only on your device
+- Conversion history: The App keeps a list of your past conversions (file name, format, size, duration, and date) in local storage on your device only. This data never leaves your device and is deleted when you clear it in the App ("Clear all" or per item) or uninstall the App.
+- Converted files are saved to your device's Music folder (Music/VideoToMP3). They remain on your device until you delete them.
+
+3. Permissions the App uses
+- Photos/Videos (system picker): The App uses the Android system photo picker so you can choose a video to convert. It only accesses the specific video you select — it does not scan or read your other files.
+- Modify system settings (WRITE_SETTINGS): Requested only if you choose to set a converted clip as your ringtone, notification, or alarm sound.
+- Internet: Used to display advertisements (see "Advertising").
+
+4. Advertising
+The App displays advertisements provided by Google AdMob. To serve and measure ads, Google and its partners may collect and use certain information, such as your device's advertising identifier, IP address, general device information, and app interaction data. This information is collected and processed by Google, not by us.
+
+Learn more and manage your choices:
+- Google Privacy Policy: https://policies.google.com/privacy
+- How Google uses information from apps that use its services: https://policies.google.com/technologies/partner-sites
+- You can reset your advertising ID or opt out of ad personalization in your device settings (Settings → Google → Ads).
+
+5. Children's privacy
+The App is intended for a general audience and is not directed to children under 13 (or the minimum age required in your country). We do not knowingly collect personal information from children. If you believe a child has provided us information, please contact us so we can remove it.
+
+6. Data security
+Because conversion and history are handled locally on your device, your media stays under your control. Advertising-related data is processed by Google under its own security and privacy practices.
+
+7. Data retention and deletion
+You can delete your conversion history at any time within the App (per item or "Clear all"). Uninstalling the App removes all data stored by the App on your device. To reset advertising identifiers, use your device's Google Ads settings.
+
+8. Changes to this Privacy Policy
+We may update this Privacy Policy from time to time. We will post any changes on this page and update the "Last updated" date above.
