@@ -1,0 +1,49 @@
+Privacy Policy — Video Background Remover
+
+Effective date: June 4, 2026
+
+Video Background Remover ("the App", "we", "us", or "our") respects your privacy. This Privacy Policy explains how the App handles your information.
+
+The short version: Video Background Remover does all of its work directly on your device. We do not collect, store, sell, or share your photos, videos, or any personal information, and the App can be used fully offline.
+
+1. Information We Do Not Collect
+We do not collect, transmit, or store any personal data on any server. Specifically, we do NOT collect:
+- Your name, email address, phone number, or account details — the App has no sign-up or login.
+- Your photos or videos — media you open or create stays on your device.
+- Your location.
+- Advertising identifiers, usage analytics, or behavioral data.
+The App contains no advertising, no analytics, and no third-party tracking software, and we operate no servers that receive your content.
+
+2. On-Device Processing
+All background removal, cut-out, segmentation, and editing happen locally on your device using on-device technologies (Google ML Kit and Microsoft ONNX Runtime). Your photos and videos are never uploaded to us or to the internet. No internet connection is required to process your media.
+
+3. Permissions We Request
+The App may ask for the following permissions, each used only for the feature you choose:
+- Camera: to let you capture a photo or video inside the App for editing. Captured media is saved only on your device.
+- Microphone (audio recording): to record sound when you record a video with the in-app camera. Audio is stored only inside that video file on your device.
+- Photos / Media / Storage: to let you select the photos or videos you want to edit, and to save your finished results to your device's gallery (in the "Video Background Remover" album). On modern Android versions the App uses the system media picker, so it can access only the specific files you choose.
+You can grant or revoke these permissions at any time in your device Settings. The App does not use media for any purpose other than the editing you request.
+
+4. How Your Files Are Stored
+Files you create with the App are saved to your device's local storage and gallery. They remain entirely under your control — you can view, share, or delete them at any time. We have no access to these files.
+
+5. Sharing Your Content
+If you choose to share an exported photo or video using your device's Share feature, it is sent through the app you select (for example, a messaging or social app). That sharing is initiated by you and is governed by the privacy policy of the service you share to. The App itself does not share your content.
+
+6. Third-Party Technologies
+The App uses the following components to perform editing on your device. They run locally and do not receive or transmit your media to us or to any third party:
+- Google ML Kit (on-device image segmentation)
+- Microsoft ONNX Runtime (on-device inference)
+- AndroidX CameraX (camera capture)
+
+7. Children's Privacy
+The App does not knowingly collect any personal information from anyone, including children under the age of 13. Because the App collects no data, it can be used without providing any personal information.
+
+8. Data Security
+Because your content never leaves your device and we collect no personal data, there is no personal information on our side that could be lost, stolen, or misused. Files on your device are protected by your device's own security.
+
+9. Your Rights
+Since we do not collect or hold any of your personal data, there is nothing for us to access, correct, or delete on your behalf. You remain in full control of all media on your device.
+
+10. Changes to This Policy
+We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date. Continued use of the App after changes means you accept the revised policy.
