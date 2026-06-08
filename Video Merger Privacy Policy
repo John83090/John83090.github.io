@@ -1,51 +1,42 @@
-Privacy Policy
-App: Periodic Table Pro
-Effective date: June 07 2026
-Contact: [CONTACT EMAIL]
+Privacy Policy — Video Merger, Joiner & Collage (VideoMerge Pro)
+Effective date: June 8, 2026
 
-This Privacy Policy explains how Periodic Table Pro (the "App") handles information. We have designed the App to work offline and to collect as little data as possible. By using the App, you agree to this policy.
+Nageshwar Rao ("we", "us", or "our") built the Video Merger, Joiner & Collage app ("the App"). This Privacy Policy explains how the App handles your information. Your privacy is our priority: the App does not collect, store, or share any personal data.
 
 Summary
 
-We do not require an account and do not ask for your name, email, or any personal details.
-Your favourites, notes, and settings are stored only on your device. We do not upload them.
-The App can show element photos from Wikimedia and open Wikipedia in your browser, which involves standard internet requests to those services.
-The App may display ads through Google AdMob, which may use a device advertising identifier.
+We do not collect any personal information.
+We do not require an account or sign‑up.
+The App works fully offline and does not request internet access, so your files never leave your device.
+All video and audio processing happens locally on your device.
+We do not show ads or use analytics or tracking.
 Information We Collect
+None. We do not collect, transmit, or store any personal or usage data. We have no servers that receive your data.
 
-Information you provide. The App lets you save favourite elements and write personal notes. This content is stored locally on your device and is not transmitted to us or any third party. It is removed when you clear the App's data or uninstall the App.
+Access to Your Media (Videos/Audio)
+To let you merge and edit videos, the App needs permission to access the media you choose:
 
-Information collected automatically. The App itself contains no proprietary analytics or tracking. However:
+Videos & Audio (READ_MEDIA_VIDEO, READ_MEDIA_AUDIO, and READ_EXTERNAL_STORAGE on older devices): used only to let you select the videos and music you want to merge or edit, and to save the videos you create back to your device. These files are processed entirely on your device and are never uploaded or shared.
+Notifications (POST_NOTIFICATIONS): used only to show processing progress. You can disable notifications anytime in your device settings.
+The App only accesses the specific files you select. Output videos are saved to your device's storage (e.g., the Movies/VideoMerge Pro folder) and remain under your control.
 
-Internet requests: When you view an element photo, the App requests that image from Wikimedia Commons; when you tap a "Wikipedia"/"Learn more" link, your device opens that page in your browser. As with any internet request, the destination servers may receive your device's IP address, the requested URL, and basic technical information in their normal logs.
-Advertising (if enabled): The App may use Google AdMob to display ads. Advertising providers may collect or receive information such as a device advertising identifier and ad-interaction and device data to serve and measure ads.
-We do not knowingly collect precise location, contacts, photos, microphone, or camera data.
+How Your Data Is Used
+The media you select is used solely to perform the editing actions you request (merge, join, collage, trim, compress, convert, add music, etc.) on your device. We do not analyze, copy, transmit, or retain your content.
 
-How We Use Information
+Data Sharing and Disclosure
+We do not sell, trade, or transfer any data to outside parties. Because the App does not collect data, there is nothing to share. If you share a video you created using your device's share feature, that action is initiated by you and governed by the privacy policy of the destination app or service.
 
-To provide core features (display elements, save favourites and notes, remember settings).
-To load optional element images and open reference links you tap.
-To display and measure advertising, if ads are enabled.
-Advertising
-If advertising is enabled, the App uses Google AdMob. Google may use a device advertising identifier and related data to serve personalized or non-personalized ads and to measure ad performance, per Google's policies (https://policies.google.com/technologies/ads). You can reset/delete your advertising ID and opt out of ad personalization in Settings → Privacy → Ads on Android. Where required by law, the App will request your consent before serving personalized ads.
+Third‑Party Services
+The App uses open‑source libraries (such as FFmpeg and AndroidX/Jetpack components) to perform on‑device media processing. These run locally and do not collect or transmit your personal information. The App contains no advertising SDKs and no analytics SDKs.
 
-Third-Party Services
-
-Google Play Services / Google AdMob — https://policies.google.com/privacy
-Wikimedia Commons / Wikipedia — https://foundation.wikimedia.org/wiki/Policy:Privacy_policy
-We do not sell your personal information.
-
-Data Retention and Deletion
-We do not store your data on our servers. Favourites, notes, and settings live only on your device and are deleted when you clear the App's storage or uninstall the App.
+Data Security
+Because all processing happens locally and no data is transmitted off your device, your content stays on your device under the protection of your device's own security.
 
 Children's Privacy
-The App is an educational reference for a general audience. It is not directed to children under 13 (or the minimum age required in your country), and we do not knowingly collect personal information from children. Any ads shown in child-directed contexts are intended to be non-personalized in accordance with applicable laws and Google Play's Families policy.
+The App does not knowingly collect any personal information from anyone, including children under 13. It is safe for general audiences.
 
-Security
-Because the App keeps your content on your own device and does not transmit it to us, your data stays under your control. No method of storage is 100% secure, but we rely on Android's app sandboxing to protect locally stored data.
+Your Rights and Choices
+You can revoke the App's media or notification permissions anytime in your device's Settings. You can delete videos you created from within the App or your device's file manager. Uninstalling the App removes it and its app‑specific data.
 
-Your Rights
-Depending on where you live (e.g., EU/UK GDPR or California CCPA/CPRA), you may have rights to access, correct, or delete personal data. Because we do not hold personal data about you on our servers, most such data is fully under your control on your device. For advertising data handled by Google, use Google's privacy controls linked above or contact us.
-
-Changes to This Policy
-We may update this policy from time to time. Changes will be posted at this URL with a new effective date.
+Changes to This Privacy Policy
+We may update this policy from time to time. Changes will be posted on this page with an updated effective date.
